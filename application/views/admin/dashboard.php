@@ -247,12 +247,12 @@
                             <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td>Sosialisasi Alur Kerja Baru</td>
-                                <td>15 Maret 2023</td>
-                                <td>Ruang Rapat Utama</td>
-                                <td>Bpk. Douglas McGee</td>
+                                <td>Sosialisasi Web Santika-Dev</td>
+                                <td>25 Maret 2026</td>
+                                <td>Kantor Pemerintahan Daerah</td>
+                                <td>Pimpinan</td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('kegiatan/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
+                                    <a href="<?= base_url('admin/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
                                         <i class="fas fa-eye"></i> Detail
                                     </a>
                                 </td>
