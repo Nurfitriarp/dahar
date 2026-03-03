@@ -232,34 +232,40 @@
                 </div>
                 
                 <div class="card-body">
+                    <?php if(!empty($kegiatan)): ?>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Nama Kegiatan</th>
-                                <th scope="col">Tanggal
-                                <th scope="col">Tempat</th>
-                                <th scope="col">Pemimpin Rapat</th>
-                                <th scope="col" width="20%" class="text-center">Aksi</th>
+                                <th>#</th>
+                                <th>Nama Kegiatan</th>
+                                <th>Tanggal</th>
+                                <th>Tempat</th>
+                                <th>Pemimpin Rapat</th>
+                                <th class="text-center" width="20%">Aksi</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Sosialisasi Alur Kerja Baru</td>
-                                <td>15 Maret 2023</td>
-                                <td>Ruang Rapat Utama</td>
-                                <td>Bpk. Douglas McGee</td>
-                                <td class="text-center">
-                                    <a href="<?= base_url('kegiatan/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
-                                        <i class="fas fa-eye"></i> Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
+                            <?php $no = 1; foreach($kegiatan as $row): ?>
+                                <tr>
+                                    <th scope="row"><?= $no++; ?></th>
+                                    <td><?= $row->NAMA ?></td>
+                                    <td><?= $row->TANGGAL ?></td>
+                                    <td><?= $row->TEMPAT ?></td>
+                                    <td><?= $row->PIMPINAN_RAPAT ?></td>
+                                    <td class="text-center">
+                                        <a href="<?= base_url('kegiatan/detail/'. $row->id); ?>" class="btn btn-sm btn-primary" title="Detail">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
                         </table>
                     </div>
+                    <?php else: ?>
+                        <p class="text-center">Data tidak ditemukan</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
