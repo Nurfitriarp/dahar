@@ -246,21 +246,19 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $no = 1; foreach($kegiatan as $row): ?>
-                                <tr>
-                                    <th scope="row"><?= $no++; ?></th>
-                                    <td><?= $row->NAMA ?></td>
-                                    <td><?= $row->TANGGAL ?></td>
-                                    <td><?= $row->TEMPAT ?></td>
-                                    <td><?= $row->PIMPINAN_RAPAT ?></td>
-                                    <td class="text-center">
-                                        <a href="<?= base_url('kegiatan/detail/'. $row->id); ?>" class="btn btn-sm btn-primary" title="Detail">
-                                            <i class="fas fa-eye"></i> Detail
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Sosialisasi Alur Kerja Baru</td>
+                                <td>15 Maret 2023</td>
+                                <td>Ruang Rapat Utama</td>
+                                <td>Bpk. Douglas McGee</td>
+                                <td class="text-center">
+                                    <a href="<?= base_url('kegiatan/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
+                                        <i class="fas fa-eye"></i> Detail
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
                         </table>
                     </div>
                     <?php else: ?>

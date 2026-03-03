@@ -23,5 +23,16 @@ class Admin extends CI_Controller {
         $this->load->view('admin/sidebar');
         $this->load->view('admin/dashboard', $data);
         $this->load->view('admin/footer');
-    } 
+    }
+    
+    public function detail($id)
+    {
+        $data['detail'] = $this->M_admin->get_detail($id);
+        $data['peserta'] = $this->M_admin->get_peserta($id);
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/rekap_detail', $data);
+        $this->load->view('admin/footer');
+    }
 }
