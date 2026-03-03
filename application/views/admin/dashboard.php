@@ -253,7 +253,7 @@
                                 <td>Ruang Rapat Utama</td>
                                 <td>Bpk. Douglas McGee</td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('kegiatan/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
+                                    <a href="<?= base_url('admin/detail/1'); ?>" class="btn btn-sm btn-primary" title="Detail">
                                         <i class="fas fa-eye"></i> Detail
                                     </a>
                                 </td>
