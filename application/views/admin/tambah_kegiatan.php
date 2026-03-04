@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h4 class="mb-3">Tambah Kegiatan</h4>
+    <h4 class="mt-4 mb-4">Tambah Kegiatan</h4>
 
     <?php $CI =& get_instance(); ?>
     <?php if ($CI->session->flashdata('success')): ?>
