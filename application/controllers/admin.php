@@ -175,7 +175,7 @@ class Admin extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Gagal menambahkan kegiatan.');
         }
-        redirect('admin/dashboard');
+        redirect('admin/kegiatan');
     }
 
     // Hapus kegiatan
@@ -183,7 +183,7 @@ class Admin extends CI_Controller {
     {
         if (!$id) {
             $this->session->set_flashdata('error', 'ID kegiatan tidak valid.');
-            redirect('admin/dashboard');
+            redirect('admin/kegiatan');
         }
 
         $ok = $this->M_admin->delete_kegiatan($id);
@@ -192,6 +192,6 @@ class Admin extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Gagal menghapus kegiatan.');
         }
-        redirect('admin/dashboard');
+        redirect('admin/kegiatan');
     }
 }
