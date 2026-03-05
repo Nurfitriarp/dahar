@@ -24,9 +24,9 @@ class Admin extends CI_Controller {
 
     public function dashboard()
     {
-        // Pastikan nama model di sini sama dengan alias di atas
-        // ambil data kegiatan dari model
-        $data['kegiatan'] = $this->M_admin->get_data();
+        // Profile page - fetch admin data from tbl_user
+        $admin_id = $this->session->userdata('admin_id') ?: 1; // default to 1 if not set
+        $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
         
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');
@@ -41,7 +41,7 @@ class Admin extends CI_Controller {
         
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');
-        $this->load->view('admin/dashboard', $data);
+        $this->load->view('admin/rekap_kegiatan', $data);
         $this->load->view('admin/footer');
     }
     
@@ -69,7 +69,7 @@ class Admin extends CI_Controller {
         
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');
-        $this->load->view('admin/dashboard', $data);
+        $this->load->view('admin/rekap_kegiatan', $data);
         $this->load->view('admin/footer');
     }
 

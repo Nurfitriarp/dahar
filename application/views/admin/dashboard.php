@@ -13,7 +13,7 @@
                     </button>
 
                     <div class="d-none d-lg-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100">
-                        <h1 class="h5 mb-0 text-gray-800 font-weight-bold">Rekap</h1>
+                        <h1 class="h5 mb-0 text-gray-800 font-weight-bold">My Profile</h1>
                     </div>
                     
 
@@ -69,115 +69,98 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Flashdata Alert -->
-                    <?php $CI =& get_instance(); ?>
-                    <?php if ($CI->session->flashdata('success')): ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $CI->session->flashdata('success') ?>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    <?php endif; ?>
-
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"></h1>
                     </div>
 
                     <!-- Content Row -->
-
-                    <div class="row justify-content-center">
-    <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    
-                    <h6 class="m-0 font-weight-bold text-primary">REKAP</h6>              
-                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('admin/rekap/search'); ?>">
-                        <?= form_hidden($this->security->get_csrf_token_name(), $this->security->get_csrf_hash()); ?>
-                        <div class="input-group">
-                            <input type="text" name="keyword" class="form-control bg-light border-5 small" placeholder="Cari Kegiatan..."
-                                aria-label="Search" aria-describedby="basic-addon2" value="<?= isset($keyword) ? $keyword : ''; ?>">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                    <div class="row">
+                        <!-- Profile Card -->
+                        <div class="col-lg-12 mb-4">
+                            <div class="card shadow">
+                                <div class="card-body d-flex align-items-center">
+                                    <img src="<?= base_url('assets/img/admin.jpg'); ?>" class="rounded-circle" width="120" height="120" style="object-fit: cover;" alt="Foto Admin">
+                                    <div class="ml-4">
+                                        <h4 class="mb-1"><?= isset($admin) ? $admin->NAMA : 'Admin Name'; ?></h4>
+                                        <p class="text-muted mb-0"><strong><?= isset($admin) ? $admin->ROLE : 'Admin'; ?></strong></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </form>
 
-                </div>
-                
-                <div class="card-body">
-                    <!-- Flashdata Error Alert -->
-                    <?php if ($CI->session->flashdata('error')): ?>
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= $CI->session->flashdata('error') ?>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <!-- Personal Information Card -->
+                        <div class="col-lg-12 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="mb-3"><strong>ID:</strong> <?= isset($admin) ? $admin->ID : '-'; ?></p>
+                                            <p class="mb-3"><strong>Nama:</strong> <?= isset($admin) ? $admin->NAMA : '-'; ?></p>
+                                            <p class="mb-3"><strong>Perangkat Daerah:</strong> <?= isset($admin) ? $admin->PERANGKAT_DAERAH : '-'; ?></p>
+                                            <p class="mb-3"><strong>Bidang:</strong> <?= isset($admin) ? $admin->BIDANG : '-'; ?></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-3"><strong>Username:</strong> <?= isset($admin) ? $admin->USERNAME : '-'; ?></p>
+                                            <p class="mb-3"><strong>Role:</strong> <span class="badge badge-<?= isset($admin) && $admin->ROLE == 'super_admin' ? 'danger' : 'primary'; ?>"><?= isset($admin) ? strtoupper($admin->ROLE) : '-'; ?></span></p>
+                                            <p class="mb-3"><strong>Created At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->created_at)) : '-'; ?></p>
+                                            <p class="mb-3"><strong>Updated At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->updated_at)) : '-'; ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    <?php endif; ?>
 
-                    <?php if(isset($keyword) && !empty($keyword)): ?>
-                        <div class="alert alert-info">
-                            Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
-                            <a href="<?= base_url('admin/rekap'); ?>" class="float-right">Bersihkan pencarian</a>
+                        <!-- Activity Log Card -->
+                        <div class="col-lg-12 mb-4">
+                            <div class="card shadow">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Activity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>2026-03-05 14:30</td>
+                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2026-03-05 14:15</td>
+                                                    <td><span class="badge badge-info">ADD</span> Added new kegiatan "Sosialisasi Keamanan Informasi"</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2026-03-04 10:45</td>
+                                                    <td><span class="badge badge-warning">EDIT</span> Edited kegiatan "Workshop Teknologi"</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2026-03-03 16:20</td>
+                                                    <td><span class="badge badge-danger">DELETE</span> Deleted kegiatan "Rapat Koordinasi"</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2026-03-02 11:00</td>
+                                                    <td><span class="badge badge-primary">PRINT</span> Printed activity report</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2026-03-01 09:30</td>
+                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    <?php endif; ?>
-                    <?php if(!empty($kegiatan)): ?>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Kegiatan</th>
-                                <th>Tanggal</th>
-                                <th>Tempat</th>
-                                <th>Pemimpin Rapat</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $no = 1; foreach($kegiatan as $row): ?>
-                            <tr>
-                                <th scope="row"><?= $no++; ?></th>
-                                <td><?= $row->NAMA ?></td>
-                                <td><?= $row->TANGGAL ?></td>
-                                <td><?= $row->TEMPAT ?></td>
-                                <td><?= $row->PIMPINAN_RAPAT ?></td>
-                            </tr>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        </table>
                     </div>
-                    <?php else: ?>
-                    <div class="table-responsive">
-                        <?php if(isset($keyword) && !empty($keyword)): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fas fa-search"></i> <strong>Tidak Ada Hasil!</strong><br>
-                                Pencarian untuk "<strong><?= htmlspecialchars($keyword); ?></strong>" tidak menemukan data. Coba gunakan kata kunci yang berbeda.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <?php else: ?>
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <i class="fas fa-info-circle"></i> <strong>Tidak Ada Data</strong><br>
-                                Belum ada kegiatan yang terdaftar. Silakan <a href="<?= base_url('admin/tambah'); ?>">tambah kegiatan baru</a>.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-</div>
-
-                    
                 </div>
                 <!-- /.container-fluid -->
 
