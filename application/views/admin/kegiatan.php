@@ -13,7 +13,7 @@
                     </button>
 
                     <div class="d-none d-lg-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100">
-                        <h1 class="h5 mb-0 text-gray-800 font-weight-bold">Rekap</h1>
+                        <h1 class="h5 mb-0 text-gray-800 font-weight-bold">Kegiatan</h1>
                     </div>
                     
 
@@ -83,6 +83,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"></h1>
+                        <a href="<?= base_url('admin/tambah'); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-plus fa-sm text-white-50"></i> Tambah Kegiatan</a>
                     </div>
 
                     <!-- Content Row -->
@@ -92,8 +94,8 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     
-                    <h6 class="m-0 font-weight-bold text-primary">REKAP</h6>              
-                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('admin/rekap/search'); ?>">
+                    <h6 class="m-0 font-weight-bold text-primary">KEGIATAN</h6>              
+                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('admin/kegiatan/search'); ?>">
                         <?= form_hidden($this->security->get_csrf_token_name(), $this->security->get_csrf_hash()); ?>
                         <div class="input-group">
                             <input type="text" name="keyword" class="form-control bg-light border-5 small" placeholder="Cari Kegiatan..."
@@ -122,7 +124,7 @@
                     <?php if(isset($keyword) && !empty($keyword)): ?>
                         <div class="alert alert-info">
                             Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
-                            <a href="<?= base_url('admin/rekap'); ?>" class="float-right">Bersihkan pencarian</a>
+                            <a href="<?= base_url('admin/kegiatan'); ?>" class="float-right">Bersihkan pencarian</a>
                         </div>
                     <?php endif; ?>
                     <?php if(!empty($kegiatan)): ?>
@@ -135,6 +137,7 @@
                                 <th>Tanggal</th>
                                 <th>Tempat</th>
                                 <th>Pemimpin Rapat</th>
+                                <th class="text-center" width="auto">Aksi</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -145,7 +148,19 @@
                                 <td><?= $row->TANGGAL ?></td>
                                 <td><?= $row->TEMPAT ?></td>
                                 <td><?= $row->PIMPINAN_RAPAT ?></td>
-                            </tr>
+                                <td class="text-center" style="padding: 8px 6px;">
+                                    <div class="d-flex justify-content-center flex-wrap" style="gap: 6px;">
+                                        <a href="<?= base_url('admin/detail/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-primary" style="width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/edit/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-warning" style="width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/hapus/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-danger" style="width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Hapus" onclick="return confirm('Yakin ingin menghapus kegiatan ini?');">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>

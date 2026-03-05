@@ -11,6 +11,8 @@ class Admin extends CI_Controller {
         parent::__construct();
         // load library session untuk flashdata
         $this->load->library('session');
+        // load form helper
+        $this->load->helper('form');
         // Gunakan alias jika Anda ingin memanggil dengan huruf kapital 'M_admin'
         $this->load->model('M_admin', 'M_admin');
     }
@@ -24,6 +26,17 @@ class Admin extends CI_Controller {
     {
         // Pastikan nama model di sini sama dengan alias di atas
         // ambil data kegiatan dari model
+        $data['kegiatan'] = $this->M_admin->get_data();
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/dashboard', $data);
+        $this->load->view('admin/footer');
+    }
+
+    public function rekap()
+    {
+        // Tampilkan halaman rekap kegiatan
         $data['kegiatan'] = $this->M_admin->get_data();
         
         $this->load->view('admin/header');
@@ -57,6 +70,61 @@ class Admin extends CI_Controller {
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');
         $this->load->view('admin/dashboard', $data);
+        $this->load->view('admin/footer');
+    }
+
+    // Search kegiatan di halaman rekap
+    public function rekap_search()
+    {
+        $keyword = $this->input->post('keyword');
+        if ($keyword) {
+            $data['kegiatan'] = $this->M_admin->search_kegiatan($keyword);
+            // Jika data tidak ditemukan, redirect dengan pesan error
+            if (empty($data['kegiatan'])) {
+                $this->session->set_flashdata('error', 'Data kegiatan dengan keyword "' . htmlspecialchars($keyword) . '" tidak ditemukan.');
+                redirect('admin/rekap');
+            }
+        } else {
+            $data['kegiatan'] = $this->M_admin->get_data();
+        }
+        $data['keyword'] = $keyword;
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/dashboard', $data);
+        $this->load->view('admin/footer');
+    }
+
+    public function kegiatan()
+    {
+        // Tampilkan halaman kegiatan
+        $data['kegiatan'] = $this->M_admin->get_data();
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/kegiatan', $data);
+        $this->load->view('admin/footer');
+    }
+
+    // Search kegiatan di halaman kegiatan
+    public function kegiatan_search()
+    {
+        $keyword = $this->input->post('keyword');
+        if ($keyword) {
+            $data['kegiatan'] = $this->M_admin->search_kegiatan($keyword);
+            // Jika data tidak ditemukan, redirect dengan pesan error
+            if (empty($data['kegiatan'])) {
+                $this->session->set_flashdata('error', 'Data kegiatan dengan keyword "' . htmlspecialchars($keyword) . '" tidak ditemukan.');
+                redirect('admin/kegiatan');
+            }
+        } else {
+            $data['kegiatan'] = $this->M_admin->get_data();
+        }
+        $data['keyword'] = $keyword;
+        
+        $this->load->view('admin/header');
+        $this->load->view('admin/sidebar');
+        $this->load->view('admin/kegiatan', $data);
         $this->load->view('admin/footer');
     }
 
