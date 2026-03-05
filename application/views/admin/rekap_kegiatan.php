@@ -155,7 +155,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
     // Auto dismiss alert setelah 3 detik
