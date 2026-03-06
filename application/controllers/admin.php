@@ -254,4 +254,53 @@ public function edit($id)
         redirect(base_url());
     }
 
+    // Ubah password admin
+    public function change_password()
+    {
+        $admin_id = $this->session->userdata('admin_id');
+        if (!$admin_id) {
+            redirect('auth');
+        }
+
+        $old = $this->input->post('old_password');
+        $new = $this->input->post('new_password');
+
+        // Ambil user saat ini
+        $user = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+        if (!$user) {
+            $this->session->set_flashdata('error', 'User tidak ditemukan.');
+            redirect('admin');
+        }
+
+        // Verifikasi password lama (mendukung hash & plain untuk transisi)
+        if (!(password_verify($old, $user->PASSWORD) || $old == $user->PASSWORD)) {
+            $this->session->set_flashdata('error', 'Password lama tidak cocok.');
+            redirect('admin');
+        }
+
+        // Update dengan hash
+        $this->db->where('ID', $admin_id);
+        if ($this->db->update('tbl_user', ['PASSWORD' => password_hash($new, PASSWORD_DEFAULT)])) {
+            $this->session->set_flashdata('success', 'Password berhasil diubah.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal mengubah password.');
+        }
+
+        redirect('admin');
+    }
+
+    // Print daftar hadir rekap kegiatan
+    public function print_rekap($id)
+    {
+        $data['detail'] = $this->M_admin->get_detail($id);
+        $data['peserta'] = $this->M_admin->get_peserta($id);
+
+        if (!$data['detail']) {
+            $this->session->set_flashdata('error', 'Data kegiatan tidak ditemukan.');
+            redirect('admin/rekap');
+        }
+
+        $this->load->view('admin/print_rekap', $data);
+    }
+
 }
