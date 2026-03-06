@@ -251,7 +251,7 @@ public function edit($id)
     public function logout()
     {
         $this->session->sess_destroy();
-        redirect('auth');
+        redirect(base_url());
     }
 
 }
