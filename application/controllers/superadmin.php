@@ -3,18 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Superadmin extends CI_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        // Proteksi: Hanya yang sudah login DAN role-nya super_admin yang bisa masuk
-        if (!$this->session->userdata('admin_id')) {
-            redirect('auth');
-        }
-        if ($this->session->userdata('role') !== 'super_admin') {
-            $this->session->set_flashdata('error', 'Akses ditolak! Anda bukan Super Admin.');
-            redirect('admin/dashboard');
-        }
-        $this->load->model('M_admin');
+// PERBAIKAN PADA application/controllers/Superadmin.php
+public function __construct() {
+    parent::__construct();
+    if (!$this->session->userdata('admin_id')) {
+        redirect('auth');
     }
+
+    $this->log_activity('LOGIN', 'Logged in to ' . ($user->ROLE === 'super_admin' ? 'Superadmin' : 'Admin') . ' panel');
+    
+    // PERBAIKAN: Arahkan ke 'admin/dashboard'
+    if ($this->session->userdata('role') !== 'super_admin') {
+        $this->session->set_flashdata('error', 'Akses ditolak! Anda bukan Super Admin.');
+        redirect('admin/dashboard'); 
+    }
+    $this->load->model('M_superadmin');
+}
 
     public function index() {
         $this->users();

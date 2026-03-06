@@ -11,7 +11,11 @@ class Auth extends CI_Controller {
     public function index() {
         // Jika sudah ada session, langsung ke dashboard
         if ($this->session->userdata('admin_id')) {
-            redirect('admin/dashboard');
+            if ($this->session->userdata('role') === 'super_admin') {
+                redirect('superadmin/dashboard');
+            } else {
+                redirect('admin/dashboard');
+            }
         }
         $this->load->view('auth/login');
     }
@@ -39,15 +43,23 @@ class Auth extends CI_Controller {
                 $this->session->set_userdata($session_data);
                 
                 // Redirect berdasarkan Role (Admin/SuperAdmin)
-                redirect('admin/dashboard');
-            } else {
-                $this->session->set_flashdata('error', 'Password yang Anda masukkan salah.');
-                redirect('auth');
-            }
+                if ($user->ROLE === 'super_admin') {
+                    redirect('superadmin/dashboard'); // Arahkan ke controller Superadmin
+                } else {
+                    redirect('admin/dashboard');  // Arahkan ke controller Admin biasa
+                };
+                } else {
+                    $this->session->set_flashdata('error', 'Password yang Anda masukkan salah.');
+                    redirect('auth');
+                }
         } else {
             $this->session->set_flashdata('error', 'Username tidak terdaftar.');
             redirect('auth');
         }
+            
+        // Tambahkan ini tepat SEBELUM baris redirect di login_process
+        $this->log_activity('LOGIN', 'Logged in to ' . ($user->ROLE === 'super_admin' ? 'Superadmin' : 'Admin') . ' panel');
+       
     }
 
     public function logout() {
