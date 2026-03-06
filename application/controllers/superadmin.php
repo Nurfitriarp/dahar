@@ -26,18 +26,18 @@ class Superadmin extends CI_Controller {
         $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
         $data['all_users'] = $this->db->get('tbl_user')->result();
 
-        $this->load->view('admin/header');
-        $this->load->view('admin/sidebar');
+        $this->load->view('superadmin/header');
+        $this->load->view('superadmin/sidebar');
         $this->load->view('superadmin/user_list', $data); // Buat view baru nanti
-        $this->load->view('admin/footer');
+        $this->load->view('superadmin/footer');
     }
 
     // Form tambah admin baru
     public function tambah_user() {
-        $this->load->view('admin/header');
-        $this->load->view('admin/sidebar');
+        $this->load->view('superadmin/header');
+        $this->load->view('superadmin/sidebar');
         $this->load->view('superadmin/user_tambah');
-        $this->load->view('admin/footer');
+        $this->load->view('superadmin/footer');
     }
 
     // Proses simpan user dengan Password Hash
@@ -72,13 +72,11 @@ class Superadmin extends CI_Controller {
         redirect('superadmin/users');
     }
 
-
-    public function __construct() {
-    parent::__construct();
-    // Jika data session admin_id tidak ada, tendang balik ke halaman login
-    if (!$this->session->userdata('admin_id')) {
-        $this->session->set_flashdata('error', 'Silakan login terlebih dahulu.');
+    // Fungsi logout
+    public function logout()
+    {
+        $this->session->sess_destroy();
         redirect('auth');
     }
-}
+
 }

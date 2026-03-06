@@ -129,6 +129,13 @@
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
+            <!-- Nav Item - Logout -->
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('admin/logout'); ?>" onclick="return confirm('Apakah Anda yakin ingin logout?')">
+                    <i class="fas fa-fw fa-sign-out-alt"></i>
+                    <span>Logout</span></a>
+            </li>
+
             <!-- Sidebar Message -->
             <div class="sidebar-card d-none d-lg-flex">
                 <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">

@@ -247,4 +247,11 @@ public function edit($id)
         redirect('admin/kegiatan');
     }
 
+    // Fungsi logout
+    public function logout()
+    {
+        $this->session->sess_destroy();
+        redirect('auth');
+    }
+
 }

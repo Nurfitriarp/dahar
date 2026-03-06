@@ -21,6 +21,10 @@
                                 <div class="alert alert-danger small"><?= $this->session->flashdata('error') ?></div>
                             <?php endif; ?>
 
+                            <?php if($this->session->flashdata('success')): ?>
+                                <div class="alert alert-success small"><?= $this->session->flashdata('success') ?></div>
+                            <?php endif; ?>
+
                             <form class="user" method="post" action="<?= base_url('auth/login_process') ?>">
                                 <div class="form-group">
                                     <input type="text" name="username" class="form-control form-control-user" 
