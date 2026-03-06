@@ -70,7 +70,7 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"></h1>
-                        <a href="<?= base_url('admin/tambah'); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="<?= base_url('superadmin/tambah'); ?>" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                             class="fas fa-plus fa-sm text-white-50"></i> Tambah Kegiatan</a>
                     </div>
 
@@ -82,7 +82,7 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     
                     <h6 class="m-0 font-weight-bold text-primary">KEGIATAN</h6>              
-                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('admin/kegiatan/search'); ?>">
+                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('superadmin/kegiatan/search'); ?>">
                         <?= form_hidden($this->security->get_csrf_token_name(), $this->security->get_csrf_hash()); ?>
                         <div class="input-group">
                             <input type="text" name="keyword" class="form-control bg-light border-5 small" placeholder="Cari Kegiatan..."
@@ -111,7 +111,7 @@
                     <?php if(isset($keyword) && !empty($keyword)): ?>
                         <div class="alert alert-info">
                             Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
-                            <a href="<?= base_url('admin/kegiatan'); ?>" class="float-right">Bersihkan pencarian</a>
+                            <a href="<?= base_url('superadmin/kegiatan'); ?>" class="float-right">Bersihkan pencarian</a>
                         </div>
                     <?php endif; ?>
                     <?php if(!empty($kegiatan)): ?>
@@ -158,13 +158,13 @@
                                 </td>
                                 <td class="text-center" style="vertical-align: middle;">
                                     <div class="d-flex justify-content-center align-items-center" style="gap: 5px; min-width: 120px;">
-                                        <a href="<?= base_url('admin/detail/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-primary" title="Detail">
+                                        <a href="<?= base_url('superadmin/detail/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-primary" title="Detail">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="<?= base_url('admin/edit/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-warning" title="Edit">
+                                        <a href="<?= base_url('superadmin/edit/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-warning" title="Edit">
                                             <i class="fas fa-edit text-white"></i>
                                         </a>
-                                        <a href="<?= base_url('admin/hapus/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus kegiatan ini?');">
+                                        <a href="<?= base_url('superadmin/hapus/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus kegiatan ini?');">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </div>
@@ -187,7 +187,7 @@
                         <?php else: ?>
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <i class="fas fa-info-circle"></i> <strong>Tidak Ada Data</strong><br>
-                                Belum ada kegiatan yang terdaftar. Silakan <a href="<?= base_url('admin/tambah'); ?>">tambah kegiatan baru</a>.
+                                Belum ada kegiatan yang terdaftar. Silakan <a href="<?= base_url('superadmin/tambah'); ?>">tambah kegiatan baru</a>.
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

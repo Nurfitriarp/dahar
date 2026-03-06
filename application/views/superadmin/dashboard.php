@@ -154,50 +154,72 @@
 
                         <!-- Activity Log Card -->
                         <div class="col-lg-12 mb-4">
-                            <div class="card shadow">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Activity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>2026-03-05 14:30</td>
-                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-05 14:15</td>
-                                                    <td><span class="badge badge-info">ADD</span> Added new kegiatan "Sosialisasi Keamanan Informasi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-04 10:45</td>
-                                                    <td><span class="badge badge-warning">EDIT</span> Edited kegiatan "Workshop Teknologi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-03 16:20</td>
-                                                    <td><span class="badge badge-danger">DELETE</span> Deleted kegiatan "Rapat Koordinasi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-02 11:00</td>
-                                                    <td><span class="badge badge-primary">PRINT</span> Printed activity report</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-01 09:30</td>
-                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th width="20%">Waktu</th>
+                            <th width="20%">User</th>
+                            <th width="60%">Aktivitas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-content">
+                        <?php if(!empty($logs)): ?>
+                            <?php foreach($logs as $log): ?>
+                            <tr>
+                                <td>
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        <?= date('d M Y, H:i', strtotime($log->created_at)); ?>
+                                    </small>
+                                </td>
+                                <td>
+                                    <strong><?= isset($log->nama_user) ? $log->nama_user : (isset($log->NAMA) ? $log->NAMA : 'System'); ?></strong>
+                                </td>
+                                <td>
+                                    <span class="badge badge-<?= get_badge_color($log->activity_type); ?> mr-2">
+                                        <?= strtoupper($log->activity_type); ?>
+                                    </span>
+                                    <span class="text-dark"><?= $log->description; ?></span>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Belum ada riwayat aktivitas.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function loadLogs() {
+        $.ajax({
+            url: "<?= base_url('superadmin/get_latest_logs_ajax'); ?>",
+            type: "GET",
+            success: function(data) {
+                // Ini akan mengganti isi <tbody id="log-content"> secara halus
+                $('#log-content').html(data);
+            },
+            error: function() {
+                console.log("Gagal memuat log otomatis.");
+            }
+        });
+    }
+
+    // Jalankan fungsi loadLogs setiap 3 detik agar terasa "Real-Time"
+    setInterval(loadLogs, 3000); 
+</script>
                     </div>
                 </div>
                 <!-- /.container-fluid -->

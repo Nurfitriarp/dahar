@@ -13,6 +13,8 @@ class Admin extends CI_Controller {
         $this->load->library('session');
         // load form helper
         $this->load->helper('form');
+        // load activity helper
+        $this->load->helper('activity');
         // Gunakan alias jika Anda ingin memanggil dengan huruf kapital 'M_admin'
         $this->load->model('M_admin', 'M_admin');
 
@@ -35,6 +37,9 @@ class Admin extends CI_Controller {
             ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
+        
+        // Ambil activity logs
+        $data['activity_logs'] = $this->M_admin->get_activity_logs(null, 10);
         
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');

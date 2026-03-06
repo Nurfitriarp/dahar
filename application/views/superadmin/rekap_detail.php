@@ -63,10 +63,10 @@
 
                             <div class="row mt-4">
                                 <div class="col-md-12">
-                                    <a href="<?= base_url('admin/kegiatan'); ?>" class="btn btn-secondary">
+                                    <a href="<?= base_url('superadmin/kegiatan'); ?>" class="btn btn-secondary">
                                         <i class="fas fa-arrow-left"></i> Kembali
                                     </a>
-                                    <a href="<?= base_url('admin/print_rekap/' . (isset($detail) && isset($detail->ID_KEGIATAN) ? $detail->ID_KEGIATAN : '')); ?>" class="btn btn-primary" target="_blank">
+                                    <a href="<?= base_url('superadmin/print_rekap/' . (isset($detail) && isset($detail->ID_KEGIATAN) ? $detail->ID_KEGIATAN : '')); ?>" class="btn btn-primary" target="_blank">
                                         <i class="fas fa-print"></i> Cetak
                                     </a>
                                 </div>
@@ -76,7 +76,7 @@
                             <div class="alert alert-warning">
                                 Data tidak ditemukan!
                             </div>
-                            <a href="<?= base_url('admin/kegiatan'); ?>" class="btn btn-secondary">
+                            <a href="<?= base_url('superadmin/kegiatan'); ?>" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
                             <?php endif; ?>

@@ -21,49 +21,50 @@ class Auth extends CI_Controller {
     }
 
     public function login_process() {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+    $username = $this->input->post('username');
+    $password = $this->input->post('password');
 
-        // Ambil data user dari tbl_user
-        $user = $this->db->get_where('tbl_user', ['USERNAME' => $username])->row();
+    $user = $this->db->get_where('tbl_user', ['USERNAME' => $username])->row();
 
-        if ($user) {
-            // Verifikasi Password (Mendukung Hash & Plain Text untuk transisi)
-            if (password_verify($password, $user->PASSWORD) || $password == $user->PASSWORD) {
-                
-                // Set Session berdasarkan struktur tbl_user Anda
-                $session_data = [
-                    'admin_id' => $user->ID,
-                    'username' => $user->USERNAME,
-                    'nama'     => $user->NAMA,
-                    'role'     => $user->ROLE,
-                    'foto'     => $user->GAMBAR
-                ];
-                
-                $this->session->set_userdata($session_data);
-                
-                // Redirect berdasarkan Role (Admin/SuperAdmin)
-                if ($user->ROLE === 'super_admin') {
-                    redirect('superadmin/dashboard'); // Arahkan ke controller Superadmin
-                } else {
-                    redirect('admin/dashboard');  // Arahkan ke controller Admin biasa
-                };
-                } else {
-                    $this->session->set_flashdata('error', 'Password yang Anda masukkan salah.');
-                    redirect('auth');
-                }
+    if ($user) {
+        if (password_verify($password, $user->PASSWORD) || $password == $user->PASSWORD) {
+            
+            $session_data = [
+                'admin_id' => $user->ID,
+                'username' => $user->USERNAME,
+                'nama'     => $user->NAMA,
+                'role'     => $user->ROLE,
+                'foto'     => $user->GAMBAR
+            ];
+            $this->session->set_userdata($session_data);
+
+            // --- PERBAIKAN: CATAT LOG DAHULU SEBELUM REDIRECT ---
+            // Gunakan helper yang sudah kita buat
+            $role_name = ($user->ROLE === 'super_admin') ? 'Super Admin' : 'Admin';
+            log_activity('LOGIN', "User login sebagai $role_name");
+
+            // --- BARU LAKUKAN REDIRECT ---
+            if ($user->ROLE === 'super_admin') {
+                redirect('superadmin/dashboard');
+            } else {
+                redirect('admin/dashboard');
+            }
+
         } else {
-            $this->session->set_flashdata('error', 'Username tidak terdaftar.');
+            $this->session->set_flashdata('error', 'Password salah.');
             redirect('auth');
         }
-            
-        // Tambahkan ini tepat SEBELUM baris redirect di login_process
-        $this->log_activity('LOGIN', 'Logged in to ' . ($user->ROLE === 'super_admin' ? 'Superadmin' : 'Admin') . ' panel');
-       
+    } else {
+        $this->session->set_flashdata('error', 'Username tidak terdaftar.');
+        redirect('auth');
     }
+}
 
     public function logout() {
-        $this->session->sess_destroy();
-        redirect(base_url());
-    }
+    // Catat log sebelum session dihancurkan
+    log_activity('LOGOUT', 'User keluar dari sistem');
+    
+    $this->session->sess_destroy();
+    redirect('auth');
+}
 }

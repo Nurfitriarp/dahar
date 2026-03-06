@@ -5,7 +5,7 @@
 
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <form action="<?= base_url('admin/update') ?>" method="post">
+                    <form action="<?= base_url('superadmin/update') ?>" method="post">
                         <input type="hidden" name="ID_KEGIATAN" value="<?= $kegiatan->ID_KEGIATAN ?>">
 
                         <div class="form-group">
@@ -64,7 +64,7 @@
                         <button type="submit" class="btn btn-warning font-weight-bold shadow-sm">
                             <i class="fas fa-save fa-sm"></i> Simpan Perubahan
                         </button>
-                        <a href="<?= base_url('admin/kegiatan') ?>" class="btn btn-secondary shadow-sm">Batal</a>
+                        <a href="<?= base_url('superadmin/kegiatan') ?>" class="btn btn-secondary shadow-sm">Batal</a>
                     </form>
                 </div>
             </div>
