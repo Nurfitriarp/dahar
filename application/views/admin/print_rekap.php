@@ -183,7 +183,6 @@
 <body>
 
     <div class="no-print print-button-group">
-        <button class="back" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Kembali</button>
         <button onclick="window.print()"><i class="fas fa-print"></i> Cetak (Print)</button>
     </div>
 
@@ -209,7 +208,17 @@
     <div class="info-section">
         <div class="info-row">
             <div class="info-label">Tanggal</div>
-            <div class="info-value">: <?= isset($detail) ? date('d Maret Y', strtotime($detail->TANGGAL)) : '-' ?></div>
+            <div class="info-value">: 
+                <?php 
+                    if (isset($detail->TANGGAL)) {
+                        // Mengambil 10 karakter pertama (YYYY-MM-DD) untuk menghindari format sisa
+                        $tgl_clean = substr($detail->TANGGAL, 0, 10); 
+                        echo date('d F Y', strtotime($tgl_clean));
+                    } else {
+                        echo "-";
+                    }
+                ?>
+            </div>
         </div>
         <div class="info-row">
             <div class="info-label">Jam</div>
@@ -225,7 +234,27 @@
         </div>
         <div class="info-row">
             <div class="info-label">Jumlah Peserta</div>
-            <div class="info-value">: <?= isset($peserta) ? count($peserta) : 0 ?> Laki-Laki (L) ; Perempuan (P) : <?= isset($peserta) && count($peserta) > 0 ? count(array_filter($peserta, function($p) { return $p->JEN_KEL == 2; })) : 0 ?></div>
+            <div class="info-value">: 
+                <?php 
+                    // Inisialisasi awal
+                    $total_l = 0;
+                    $total_p = 0;
+
+                    if (isset($peserta) && is_array($peserta)) {
+                        foreach ($peserta as $p) {
+                            // Cek apakah JEN_KEL adalah 1 / 'L' (Laki-laki)
+                            if ($p->JEN_KEL == 1 || strtoupper($p->JEN_KEL) == 'L') {
+                                $total_l++;
+                            } 
+                            // Cek apakah JEN_KEL adalah 2 / 'P' (Perempuan)
+                            elseif ($p->JEN_KEL == 2 || strtoupper($p->JEN_KEL) == 'P') {
+                                $total_p++;
+                            }
+                        }
+                    }
+                ?>
+                <?= $total_l ?> Laki-Laki (L) ; Perempuan (P) : <?= $total_p ?>
+            </div>
         </div>
     </div>
 
@@ -247,7 +276,7 @@
                 <tr>
                     <td><?= $key + 1 ?></td>
                     <td><?= $p->NAMA ?? '-' ?></td>
-                    <td><?= $p->JEN_KEL == 1 ? 'L' : 'P' ?></td>
+                    <td style="text-align: center;"><?= $p->JEN_KEL == 1 ? 'L' : 'P' ?></td>
                     <td><?= $p->NAMA_OPD ?? '-' ?></td>
                     <td><?= $p->JABATAN ?? '-' ?></td>
                     <td><?= $p->NO_HP ?? '-' ?></td>
