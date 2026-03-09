@@ -27,21 +27,25 @@ class Superadmin extends MY_Controller {
     }
 
     public function dashboard()
-    {
-        $admin_id = $this->session->userdata('admin_id');
-        $data['admin'] = $this->db
-            ->select("*, PERANGKAT_DAERAH")
-            ->get_where('tbl_user', ['ID' => $admin_id])
-            ->row();
-        
-        // Ambil activity logs (Gunakan model yang sama)
-        $data['logs'] = $this->M_admin->get_activity_logs(null, 10);
-        
-        $this->load->view('superadmin/header');
-        $this->load->view('superadmin/sidebar');
-        $this->load->view('superadmin/dashboard', $data);
-        $this->load->view('superadmin/footer');
-    }
+{
+    $admin_id = $this->session->userdata('admin_id');
+    
+    // Gunakan select * saja jika ingin semua, 
+    // atau sebutkan satu per satu jika ingin sangat aman.
+    $data['admin'] = $this->db
+        ->get_where('tbl_user', ['ID' => $admin_id])
+        ->row();
+    
+    // Debugging (Opsional: Hapus jika sudah jalan)
+    // die(print_r($data['admin'])); 
+
+    $data['logs'] = $this->M_admin->get_activity_logs(null, 10);
+    
+    $this->load->view('superadmin/header');
+    $this->load->view('superadmin/sidebar', $data); // Pastikan data dikirim ke sidebar jika perlu
+    $this->load->view('superadmin/dashboard', $data);
+    $this->load->view('superadmin/footer');
+}
 
     // AJAX untuk Real-Time Update Activity Log
     public function get_latest_logs_ajax() {
@@ -239,23 +243,23 @@ public function detail($id)
     }
 
     // Menampilkan form edit user
-public function edit_user($id) {
-    $admin_id = $this->session->userdata('admin_id');
-    $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+    public function edit_user($id) {
+        $admin_id = $this->session->userdata('admin_id');
+        $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
     
-    // Ambil data user yang akan diedit
-    $data['user_item'] = $this->db->get_where('tbl_user', ['ID' => $id])->row();
+        // Ambil data user yang akan diedit
+        $data['user_item'] = $this->db->get_where('tbl_user', ['ID' => $id])->row();
 
-    if (!$data['user_item']) {
-        $this->session->set_flashdata('error', 'User tidak ditemukan.');
-        redirect('superadmin/kelola_user');
+        if (!$data['user_item']) {
+            $this->session->set_flashdata('error', 'User tidak ditemukan.');
+            redirect('superadmin/kelola_user');
+        }
+
+        $this->load->view('superadmin/header');
+        $this->load->view('superadmin/sidebar');
+        $this->load->view('superadmin/edit_user', $data);
+        $this->load->view('superadmin/footer');
     }
-
-    $this->load->view('superadmin/header');
-    $this->load->view('superadmin/sidebar');
-    $this->load->view('superadmin/edit_user', $data);
-    $this->load->view('superadmin/footer');
-}
 
     // Proses update data user
     public function update_user() {
@@ -288,52 +292,54 @@ public function edit_user($id) {
     }
    
     public function simpan_user() {
-    // Konfigurasi Upload Gambar
-    $config['upload_path']   = './assets/img/profile/';
-    $config['allowed_types'] = 'gif|jpg|png|jpeg';
-    $config['max_size']      = 2048; // 2MB
-    $config['file_name']     = 'profile_' . time(); // Penamaan unik
+        // Konfigurasi Upload Gambar
+        $config['upload_path']   = './assets/img/profile/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $config['max_size']      = 2048; // 2MB
+        $config['file_name']     = 'profile_' . time(); // Penamaan unik
 
-    $this->load->library('upload', $config);
+        $this->load->library('upload', $config);
 
-    if ($this->upload->do_upload('gambar')) {
-        // Jika berhasil upload
-        $upload_data = $this->upload->data();
-        $file_name   = $upload_data['file_name'];
-    } else {
-        // Jika gagal atau tidak upload, gunakan default
-        $file_name = 'default.svg';
-    }
+        if ($this->upload->do_upload('gambar')) {
+            // Jika berhasil upload
+            $upload_data = $this->upload->data();
+            $file_name   = $upload_data['file_name'];
+        } else {
+            // Jika gagal atau tidak upload, gunakan default
+            $file_name = 'default.svg';
+        }
 
-    $data = [
-        'NAMA'             => $this->input->post('nama'),
-        'PERANGKAT_DAERAH' => $this->input->post('pd'),
-        'BIDANG'           => $this->input->post('bidang'),
-        'USERNAME'         => $this->input->post('username'),
-        'PASSWORD'         => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-        'ROLE'             => $this->input->post('role'),
-        'GAMBAR'           => $file_name // Nama file yang disimpan di database
-    ];
+        $data = [
+            'NAMA'             => $this->input->post('nama'),
+            'PERANGKAT_DAERAH' => $this->input->post('pd'),
+            'BIDANG'           => $this->input->post('bidang'),
+            'USERNAME'         => $this->input->post('username'),
+            'PASSWORD'         => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+            'ROLE'             => $this->input->post('role'),
+            'GAMBAR'           => $file_name // Nama file yang disimpan di database
+        ];
 
-    if ($this->db->insert('tbl_user', $data)) {
-        $this->log_activity('ADD', "Menambahkan user baru: " . $data['USERNAME']);
-        $this->session->set_flashdata('success', 'User berhasil ditambahkan.');
-    } else {
-        $this->session->set_flashdata('error', 'Gagal menambahkan user.');
-    }
-    redirect('superadmin/kelola_user');
+        if ($this->db->insert('tbl_user', $data)) {
+            $this->log_activity('ADD', "Menambahkan user baru: " . $data['USERNAME']);
+            $this->session->set_flashdata('success', 'User berhasil ditambahkan.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menambahkan user.');
+        }
+        redirect('superadmin/kelola_user');
     }
 
     public function tambah_user() {
         $admin_id = $this->session->userdata('admin_id');
+        // Ambil data profil untuk ditampilkan di header/sidebar
         $data['admin'] = $this->db
             ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
 
+        // Pastikan urutan pemanggilan view seperti ini:
         $this->load->view('superadmin/header');
-        $this->load->view('superadmin/sidebar');
-        $this->load->view('superadmin/tambah_user', $data); // Pastikan nama file sesuai
+        $this->load->view('superadmin/sidebar', $data); // Kirim data profil ke sidebar
+        $this->load->view('superadmin/tambah_user', $data); 
         $this->load->view('superadmin/footer');
     }
 

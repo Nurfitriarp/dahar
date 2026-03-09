@@ -18,7 +18,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="<?= base_url('admin/simpan') ?>" method="post">
+            <form action="<?= base_url('superadmin/simpan') ?>" method="post">
                 <div class="form-group">
                     <label>Nama Kegiatan</label>
                     <input type="text" name="NAMA" class="form-control" required>
@@ -66,7 +66,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="<?= base_url('admin/kegiatan') ?>" class="btn btn-secondary">Batal</a>
+                <a href="<?= base_url('superadmin/kegiatan') ?>" class="btn btn-secondary">Batal</a>
             </form>
         </div>
     </div>

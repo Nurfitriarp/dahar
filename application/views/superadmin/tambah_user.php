@@ -3,7 +3,7 @@
 
     <!-- Main Content -->
     <div id="content">
-
+        
         <!-- Begin Page Content -->
         <div class="container-fluid">
             <h4 class="mt-4 mb-4">Tambah User</h4>
@@ -18,26 +18,26 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="<?= base_url('superadmin/simpan') ?>" method="post">
+            <form action="<?= base_url('superadmin/simpan_user') ?>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" name="NAMA" class="form-control" required>
+                    <input type="text" name="nama" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Perangkat Daerah</label>
-                    <input type="text" name="PERANGKAT_DAERAH" class="form-control" required>
+                    <input type="text" name="pd" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Bidang</label>
-                    <input type="text" name="BIDANG" class="form-control">
+                    <input type="text" name="bidang" class="form-control">
                 </div>
                 <div class="form-group">
                     <label>Username</label>
-                    <input type="text" name="USERNAME" class="form-control" required>
+                    <input type="text" name="username" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="PASSWORD" class="form-control" required>
+                    <input type="password" name="password" class="form-control" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -64,3 +64,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('customFile').addEventListener('change', function(e) {
+        var fileName = e.target.files[0].name;
+        var label = e.target.nextElementSibling;
+        label.innerText = fileName;
+    });
+</script>

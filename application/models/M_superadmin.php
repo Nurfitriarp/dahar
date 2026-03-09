@@ -103,4 +103,5 @@ class M_superadmin extends CI_Model {
     public function get_user_by_id($id) {
     return $this->db->get_where('tbl_user', ['ID' => $id])->row();
 }
+
 }

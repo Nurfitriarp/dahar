@@ -36,7 +36,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= isset($admin) ? $admin->USERNAME : 'User'; ?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="<?= base_url('assets/img/profile/' . (isset($admin) && isset($admin->FOTO) ? $admin->FOTO : 'default.svg')); ?>">
+                                    src="<?= base_url('assets/img/profile/' . (isset($admin) && isset($admin->GAMBAR) ? $admin->GAMBAR : 'default.svg')); ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -136,7 +136,6 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p class="mb-3"><strong>ID:</strong> <?= isset($admin) ? $admin->ID : '-'; ?></p>
                                             <p class="mb-3"><strong>Nama:</strong> <?= isset($admin) ? $admin->NAMA : '-'; ?></p>
                                             <p class="mb-3"><strong>Perangkat Daerah:</strong> <?= isset($admin) && isset($admin->PERANGKAT_DAERAH) ? $admin->PERANGKAT_DAERAH : '-'; ?></p>
                                             <p class="mb-3"><strong>Bidang:</strong> <?= isset($admin) ? $admin->BIDANG : '-'; ?></p>
@@ -159,43 +158,8 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Date</th>
-                                                    <th>Activity</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>2026-03-05 14:30</td>
-                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-05 14:15</td>
-                                                    <td><span class="badge badge-info">ADD</span> Added new kegiatan "Sosialisasi Keamanan Informasi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-04 10:45</td>
-                                                    <td><span class="badge badge-warning">EDIT</span> Edited kegiatan "Workshop Teknologi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-03 16:20</td>
-                                                    <td><span class="badge badge-danger">DELETE</span> Deleted kegiatan "Rapat Koordinasi"</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-02 11:00</td>
-                                                    <td><span class="badge badge-primary">PRINT</span> Printed activity report</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2026-03-01 09:30</td>
-                                                    <td><span class="badge badge-success">LOGIN</span> Logged in to admin panel</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+        <div class="table-responsive">
+        </div>
                             </div>
                         </div>
                     </div>
@@ -222,3 +186,23 @@
                 });
             });
         </script>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function loadLogs() {
+        $.ajax({
+            url: "<?= base_url('admin/get_latest_logs_ajax'); ?>", // Pastikan path benar
+            type: "GET",
+            success: function(data) {
+                // Mengganti isi tbody dengan id log-content
+                $('#log-content').html(data);
+            },
+            error: function() {
+                console.log("Gagal memuat log otomatis.");
+            }
+        });
+    }
+
+    // Jalankan setiap 3 detik
+    setInterval(loadLogs, 3000); 
+</script>

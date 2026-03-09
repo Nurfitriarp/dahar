@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * @property M_admin $M_admin
  */
-class Admin extends CI_Controller {
+class Admin extends MY_Controller {
 
     public function __construct()
     {
@@ -34,7 +34,7 @@ class Admin extends CI_Controller {
         $admin_id = $this->session->userdata('admin_id') ?: 1; // default to 1 if not set
         // include spaces in column name by aliasing it to a valid property
         $data['admin'] = $this->db
-            ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
+            ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
         
@@ -47,12 +47,40 @@ class Admin extends CI_Controller {
         $this->load->view('admin/footer');
     }
 
+    // AJAX untuk Real-Time Update Activity Log
+    public function get_latest_logs_ajax() {
+    $data['logs'] = $this->M_admin->get_activity_logs(null, 10);
+        $output = '';
+        if(!empty($logs)) {
+            foreach($logs as $log) {
+                $nama = isset($log->nama_user) ? $log->nama_user : 'System';
+                $waktu = date('d M Y, H:i', strtotime($log->created_at));
+                $warna = get_badge_color($log->activity_type);
+                $tipe = strtoupper($log->activity_type);
+
+                $output .= "
+                <tr>
+                    <td><small class='text-muted'><i class='fas fa-clock mr-1'></i> $waktu</small></td>
+                    <td><strong>$nama</strong></td>
+                    <td>
+                        <span class='badge badge-$warna mr-2'>$tipe</span>
+                        <span class='text-dark'>{$log->description}</span>
+                    </td>
+                </tr>";
+            }
+        } else {
+            $output = "<tr><td colspan='3' class='text-center text-muted'>Belum ada riwayat aktivitas.</td></tr>";
+        }
+        echo $output;
+    }
+
+
     public function rekap()
     {
         // Tampilkan halaman rekap kegiatan
         $admin_id = $this->session->userdata('admin_id') ?: 1;
         $data['admin'] = $this->db
-            ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
+            ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
         $data['kegiatan'] = $this->M_admin->get_data();
@@ -96,7 +124,7 @@ class Admin extends CI_Controller {
     {
         $admin_id = $this->session->userdata('admin_id') ?: 1;
         $data['admin'] = $this->db
-            ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
+            ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
         
@@ -124,7 +152,7 @@ class Admin extends CI_Controller {
         // Tampilkan halaman kegiatan
         $admin_id = $this->session->userdata('admin_id') ?: 1;
         $data['admin'] = $this->db
-            ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
+            ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
         $data['kegiatan'] = $this->M_admin->get_data();
@@ -140,7 +168,7 @@ class Admin extends CI_Controller {
     {
         $admin_id = $this->session->userdata('admin_id') ?: 1;
         $data['admin'] = $this->db
-            ->select("*, `PERANGKAT DAERAH` AS PERANGKAT_DAERAH")
+            ->select("*, PERANGKAT_DAERAH")
             ->get_where('tbl_user', ['ID' => $admin_id])
             ->row();
         
