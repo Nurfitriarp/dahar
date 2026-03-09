@@ -122,8 +122,7 @@
                                             <p class="text-muted mb-0"><strong><?= isset($admin) ? $admin->ROLE : 'Admin'; ?></strong></p>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editPasswordModal"><i class="fas fa-key"></i> Edit Password</a>
-                                </div>
+                                    </div>
                             </div>
                         </div>
 
@@ -136,17 +135,25 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p class="mb-3"><strong>ID:</strong> <?= isset($admin) ? $admin->ID : '-'; ?></p>
                                             <p class="mb-3"><strong>Nama:</strong> <?= isset($admin) ? $admin->NAMA : '-'; ?></p>
+                                            <p class="mb-3"><strong>Username:</strong> <?= isset($admin) ? $admin->USERNAME : '-'; ?></p>
                                             <p class="mb-3"><strong>Perangkat Daerah:</strong> <?= isset($admin) && isset($admin->PERANGKAT_DAERAH) ? $admin->PERANGKAT_DAERAH : '-'; ?></p>
                                             <p class="mb-3"><strong>Bidang:</strong> <?= isset($admin) ? $admin->BIDANG : '-'; ?></p>
                                         </div>
                                         <div class="col-md-6">
-                                            <p class="mb-3"><strong>Username:</strong> <?= isset($admin) ? $admin->USERNAME : '-'; ?></p>
                                             <p class="mb-3"><strong>Role:</strong> <span class="badge badge-<?= isset($admin) && $admin->ROLE == 'super_admin' ? 'danger' : 'primary'; ?>"><?= isset($admin) ? strtoupper($admin->ROLE) : '-'; ?></span></p>
                                             <p class="mb-3"><strong>Created At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->created_at)) : '-'; ?></p>
                                             <p class="mb-3"><strong>Updated At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->updated_at)) : '-'; ?></p>
                                         </div>
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <a href="#" class="btn btn-sm btn-primary mt-2" data-toggle="modal" data-target="#editPasswordModal">
+                                                    <i class="fas fa-key fa-sm text-white-50 mr-1"></i> Edit Password
+                                                </a>
+                                            </div>
+                                        </div>
+                                        
+                              
                                     </div>
                                 </div>
                             </div>
