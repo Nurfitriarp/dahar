@@ -112,26 +112,25 @@
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Profile Card -->
-                        <div class="col-lg-12 mb-4">
-                            <div class="card shadow">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <img src="<?= base_url('assets/img/admin.jpg'); ?>" class="rounded-circle" width="80" height="80" style="object-fit: cover;" alt="Foto Admin">
-                                        <div class="ml-4">
-                                            <h5 class="mb-1"><?= isset($admin) ? $admin->NAMA : 'Admin Name'; ?></h5>
-                                            <p class="text-muted mb-0"><strong><?= isset($admin) ? $admin->ROLE : 'Admin'; ?></strong></p>
-                                        </div>
-                                    </div>
-                                    </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- Personal Information Card -->
                         <div class="col-lg-12 mb-4">
                             <div class="card shadow">
-                                <div class="card-header py-3">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Personal Information</h6>
+                                    
+                                    <div class="d-flex">
+                                        <a href="#" class="btn btn-sm btn-success shadow-sm mr-2" data-toggle="modal" data-target="#editFotoModal">
+                                            <i class="fas fa-camera fa-sm text-white-50 mr-1"></i> Edit Foto Profil
+                                        </a>
+                                        
+                                        <a href="#" class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editPasswordModal">
+                                            <i class="fas fa-key fa-sm text-white-50 mr-1"></i> Edit Password
+                                        </a>
+                                    </div>
                                 </div>
+                                
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -145,16 +144,32 @@
                                             <p class="mb-3"><strong>Created At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->created_at)) : '-'; ?></p>
                                             <p class="mb-3"><strong>Updated At:</strong> <?= isset($admin) ? date('d-m-Y H:i:s', strtotime($admin->updated_at)) : '-'; ?></p>
                                         </div>
-                                        <div class="row mt-4">
-                                            <div class="col">
-                                                <a href="#" class="btn btn-sm btn-primary mt-2" data-toggle="modal" data-target="#editPasswordModal">
-                                                    <i class="fas fa-key fa-sm text-white-50 mr-1"></i> Edit Password
-                                                </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="editFotoModal" tabindex="-1" role="dialog" aria-labelledby="editFotoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editFotoModalLabel">Update Foto Profil</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form method="post" action="<?= base_url('superadmin/update_foto'); ?>" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Pilih File Foto</label>
+                                                <input type="file" name="foto_profil" class="form-control-file" accept="image/*" required>
                                             </div>
                                         </div>
-                                        
-                              
-                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

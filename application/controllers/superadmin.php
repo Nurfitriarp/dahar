@@ -408,4 +408,64 @@ public function detail($id)
         log_activity('PRINT', 'Mencetak daftar hadir kegiatan: ' . $data['detail']->NAMA);
         $this->load->view('superadmin/print_rekap', $data);
     }
+
+    public function update_foto()
+{
+    // Ambil username dari session
+    $username = $this->session->userdata('username'); 
+
+    // 1. Gunakan FCPATH agar path mengarah ke root folder proyek (localhost/santika/)
+    // Ini lebih aman daripada menggunakan './'
+    $upload_path = FCPATH . 'assets/img/profile/';
+
+    // CEK OTOMATIS: Jika folder belum ada, buat foldernya sekarang
+    if (!is_dir($upload_path)) {
+        mkdir($upload_path, 0777, TRUE);
+    }
+
+    // Konfigurasi Library Upload
+    $config['upload_path']   = $upload_path;
+    $config['allowed_types'] = 'jpg|jpeg|png';
+    $config['max_size']      = 2048; // 2MB
+    $config['file_name']     = 'profile_' . $username . '_' . time();
+
+    $this->load->library('upload', $config);
+
+    // Pastikan 'foto_profil' sesuai dengan name="foto_profil" di input file modal Anda
+    if (!$this->upload->do_upload('foto_profil')) {
+        $this->session->set_flashdata('error', 'Gagal upload: ' . $this->upload->display_errors('', ''));
+        redirect('superadmin/dashboard');
+    } else {
+        $upload_data = $this->upload->data();
+        $new_image   = $upload_data['file_name'];
+
+        // 2. Ambil data lama untuk hapus file fisik
+        $old_user = $this->db->get_where('tbl_user', ['USERNAME' => $username])->row();
+        
+        // Periksa jika ada foto lama yang perlu dihapus (bukan default)
+        if ($old_user && $old_user->GAMBAR != 'default.svg' && !empty($old_user->GAMBAR)) {
+            $old_file = $upload_path . $old_user->GAMBAR;
+            if (file_exists($old_file)) {
+                unlink($old_file);
+            }
+        }
+
+        // 3. Update database
+        $data_update = [
+            'GAMBAR'     => $new_image,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->db->where('USERNAME', $username);
+        $update = $this->db->update('tbl_user', $data_update);
+
+        if ($update) {
+            $this->session->set_flashdata('success', 'Foto profil berhasil diperbarui!');
+        } else {
+            $this->session->set_flashdata('error', 'Database gagal diupdate.');
+        }
+
+        redirect('superadmin/dashboard');
+    }
+}
 }
