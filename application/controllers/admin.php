@@ -353,4 +353,53 @@ class Admin extends MY_Controller {
         $this->load->view('admin/print_rekap', $data);
     }
 
+    public function update_foto()
+{
+    $admin_id = $this->session->userdata('admin_id');
+    if (!$admin_id) redirect('auth');
+
+    // Ambil data user saat ini untuk mendapatkan nama file lama
+    $current_user = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+
+    $upload_path = FCPATH . 'assets/img/profile/';
+    if (!is_dir($upload_path)) mkdir($upload_path, 0777, TRUE);
+
+    $config['upload_path']   = $upload_path;
+    $config['allowed_types'] = 'jpg|jpeg|png';
+    $config['max_size']      = 2048; 
+    // Beri nama file unik berdasarkan ID agar tidak tertukar
+    $config['file_name']     = 'profile_' . $admin_id . '_' . time();
+
+    $this->load->library('upload', $config);
+
+    if (!$this->upload->do_upload('foto_profil')) {
+        $this->session->set_flashdata('error', 'Gagal upload: ' . $this->upload->display_errors('', ''));
+        redirect($this->session->userdata('role') == 'super_admin' ? 'superadmin/dashboard' : 'admin/dashboard');
+    } else {
+        $upload_data = $this->upload->data();
+        $new_image   = $upload_data['file_name'];
+
+        // Hapus file lama jika ada dan bukan default
+        if ($current_user && $current_user->GAMBAR != 'default.svg' && !empty($current_user->GAMBAR)) {
+            $old_file = $upload_path . $current_user->GAMBAR;
+            if (file_exists($old_file)) unlink($old_file);
+        }
+
+        // Update database menggunakan ID
+        $this->db->where('ID', $admin_id);
+        $update = $this->db->update('tbl_user', [
+            'GAMBAR'     => $new_image,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        if ($update) {
+            log_activity('EDIT', 'Memperbarui foto profil');
+            $this->session->set_flashdata('success', 'Foto profil berhasil diperbarui!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui database.');
+        }
+
+        redirect($this->session->userdata('role') == 'super_admin' ? 'superadmin/dashboard' : 'admin/dashboard');
+    }
+}
 }

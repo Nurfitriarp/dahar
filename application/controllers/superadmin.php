@@ -410,7 +410,7 @@ public function detail($id)
     }
 
     public function update_foto()
-{
+    {
     // Ambil username dari session
     $username = $this->session->userdata('username'); 
 
