@@ -40,7 +40,7 @@
                             </form>
                             <hr>
                             <div class="text-center small">
-                                &copy; 2026 Diskominfostandi
+                                &copy; 2026 Aplikasi Daftar Hadir
                             </div>
                         </div>
                     </div>

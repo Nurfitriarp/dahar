@@ -513,13 +513,17 @@ public function detail($id)
         $this->load->view('superadmin/footer');
     }
 
-    public function simpan_jenispd()
-    {
+    public function simpan_jenispd() {
         $nama_opd = $this->input->post('NAMA_OPD');
-        $data = ['NAMA_OPD' => $nama_opd];
+        
+        // Jika Anda ingin menginput ID_JOPD secara manual (bukan auto-increment)
+        $data = [
+            'ID_J-OPD' => $this->input->post('ID_J-OPD'), 
+            'NAMA_OPD' => $nama_opd
+        ];
 
-        if ($this->db->insert('tbl_jenis_opd', $data)) {
-            log_activity('ADD', 'Menambahkan jenis perangkat daerah baru: ' . $nama_opd);
+        if ($this->M_superadmin->insert_jenis_opd($data)) {
+            log_activity('ADD', 'Menambahkan jenis OPD: ' . $nama_opd);
             $this->session->set_flashdata('success', 'Jenis Perangkat Daerah berhasil ditambahkan.');
         } else {
             $this->session->set_flashdata('error', 'Gagal menambahkan data.');
@@ -548,7 +552,7 @@ public function detail($id)
 
     public function updatepd()
     {
-        $id = $this->input->post('ID_J_OPD');
+        $id = $this->input->post('ID_J-OPD');
         $nama_opd = $this->input->post('NAMA_OPD');
 
         $this->db->where('ID_J-OPD', $id);
@@ -583,8 +587,12 @@ public function detail($id)
         $admin_id = $this->session->userdata('admin_id');
         $data['superadmin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
 
+        // Logika Pencarian
         $this->db->like('NAMA_OPD', $keyword);
-        $data['kegiatan'] = $this->db->get('tbl_jenis_opd')->result();
+        $this->db->or_like('`ID_J-OPD`', $keyword); // Mencari berdasarkan kode juga
+        
+        // PERBAIKAN: Namakan index 'master' agar sinkron dengan View
+        $data['master'] = $this->db->get('tbl_jenis_opd')->result();
         $data['keyword'] = $keyword;
 
         $this->load->view('superadmin/header');
@@ -592,5 +600,5 @@ public function detail($id)
         $this->load->view('superadmin/jenispd', $data);
         $this->load->view('superadmin/footer');
     }
-
+    
 }

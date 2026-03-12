@@ -127,21 +127,12 @@ class M_superadmin extends CI_Model {
     /**
      * Proses simpan data jenis OPD baru
      */
+// Menambahkan data baru
     public function insert_jenis_opd($data) {
         return $this->db->insert('tbl_jenis_opd', $data);
     }
 
-    /**
-     * Proses update data jenis OPD
-     */
-    public function update_jenis_opd($id, $data) {
-        $this->db->where('ID_J-OPD', $id);
-        return $this->db->update('tbl_jenis_opd', $data);
-    }
-
-    /**
-     * Proses hapus data jenis OPD
-     */
+    // Hapus data berdasarkan ID_J-OPD
     public function delete_jenis_opd($id) {
         $this->db->where('ID_J-OPD', $id);
         return $this->db->delete('tbl_jenis_opd');

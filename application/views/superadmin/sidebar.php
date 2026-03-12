@@ -32,8 +32,8 @@
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="jenispd">Jenis Perangkat Daerah</a>
-                        <a class="collapse-item" href="perda">Perangkat Daerah</a>
+                        <a class="collapse-item" href="<?= base_url('superadmin/jenispd'); ?>">Jenis Perangkat Daerah</a>
+                        <a class="collapse-item" href="<?= base_url('superadmin/perda'); ?>">Perangkat Daerah</a>
                 </div>
             </li>
             <!-- Nav Item - Kelola Kegiatan -->

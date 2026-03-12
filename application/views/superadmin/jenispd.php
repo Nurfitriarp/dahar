@@ -82,11 +82,11 @@
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     
                     <h6 class="m-0 font-weight-bold text-primary">Jenis Perangkat Daerah</h6>              
-                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('superadmin/jenispd/search'); ?>">
+                    <form class="form-inline navbar-search" method="POST" action="<?= base_url('superadmin/search_jenispd'); ?>">
                         <?= form_hidden($this->security->get_csrf_token_name(), $this->security->get_csrf_hash()); ?>
                         <div class="input-group">
                             <input type="text" name="keyword" class="form-control bg-light border-5 small" placeholder="Cari Jenis Perangkat Daerah..."
-                                aria-label="Search" aria-describedby="basic-addon2" value="<?= isset($keyword) ? $keyword : ''; ?>">
+                                value="<?= isset($keyword) ? $keyword : ''; ?>">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -107,14 +107,16 @@
                             </button>
                         </div>
                     <?php endif; ?>
-
                     <?php if(isset($keyword) && !empty($keyword)): ?>
-                        <div class="alert alert-info">
-                            Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
-                            <a href="<?= base_url('superadmin/jeniaspd'); ?>" class="float-right">Bersihkan pencarian</a>
+                        <div class="alert alert-info shadow-sm">
+                            <i class="fas fa-search mr-2"></i> Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
+                            <a href="<?= base_url('superadmin/jenispd'); ?>" class="float-right text-decoration-none font-weight-bold">
+                                <i class="fas fa-times"></i> Bersihkan pencarian
+                            </a>
                         </div>
                     <?php endif; ?>
-                    <?php if(!empty($kegiatan)): ?>
+
+                    <?php if(!empty($master)): ?>
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                             <thead>
@@ -125,45 +127,24 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $no = 1; foreach($kegiatan as $row): ?>
-                            <tr>
-                                <th scope="row"><?= $no++; ?></th>
-                                <td><?= $row->NAMA_OPD ?></td>
-                                <td class="text-center" style="vertical-align: middle;">
-                                    <div class="d-flex justify-content-center align-items-center" style="gap: 5px; min-width: 120px;">
-                                        <a href="<?= base_url('superadmin/editpd/'. $row->ID_J-OPD); ?>" class="btn btn-sm btn-warning" title="Edit">
-                                            <i class="fas fa-edit text-white"></i>
-                                        </a>
-                                        <a href="<?= base_url('superadmin/hapuspd/'. $row->ID_KEGIATAN); ?>" class="btn btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus kegiatan ini?');">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                                <?php $no = 1; foreach($master as $row): ?>
+                                <tr>    
+                                    <td><?= $row->{'ID_J-OPD'}; ?></td> 
+                                    <td><?= $row->NAMA_OPD; ?></td>
+                                    <td>
+                                        <a href="<?= base_url('superadmin/editpd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-warning">Edit</a>
+                                        <a href="<?= base_url('superadmin/hapuspd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin?')">Hapus</a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
                         </tbody>
                         </table>
                     </div>
                     <?php else: ?>
-                    <div class="table-responsive">
-                        <?php if(isset($keyword) && !empty($keyword)): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fas fa-search"></i> <strong>Tidak Ada Hasil!</strong><br>
-                                Pencarian untuk "<strong><?= htmlspecialchars($keyword); ?></strong>" tidak menemukan data. Coba gunakan kata kunci yang berbeda.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <?php else: ?>
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <i class="fas fa-info-circle"></i> <strong>Tidak Ada Data</strong><br>
-                                Belum ada jenis perangkat daerah. Silakan <a href="<?= base_url('superadmin/tambahjenispd'); ?>">tambah jenis perangkat daerah baru</a>.
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        <div class="text-center py-5">
+                            <i class="fas fa-folder-open fa-3x text-gray-300 mb-3"></i>
+                            <p class="text-gray-500">Data tidak ditemukan atau masih kosong.</p>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
