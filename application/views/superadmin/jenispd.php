@@ -131,9 +131,13 @@
                                 <tr>    
                                     <td><?= $row->{'ID_J-OPD'}; ?></td> 
                                     <td><?= $row->NAMA_OPD; ?></td>
-                                    <td>
-                                        <a href="<?= base_url('superadmin/editpd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-warning">Edit</a>
-                                        <a href="<?= base_url('superadmin/hapuspd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin?')">Hapus</a>
+                                    <td class="text-center">
+                                        <a href="<?= base_url('superadmin/editpd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-warning shadow-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="<?= base_url('superadmin/hapuspd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-danger shadow-sm" onclick="return confirm('Yakin ingin menghapus perangkat daerah ini?')" title="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
