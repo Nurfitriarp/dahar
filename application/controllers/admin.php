@@ -197,13 +197,25 @@ class Admin extends MY_Controller {
     }
 
     // show tambah form
+    // show tambah form
     public function tambah()
     {
+        // 1. Ambil ID dari session
+        $admin_id = $this->session->userdata('admin_id');
+
+        // 2. Ambil data admin agar input Penyelenggara otomatis terisi
+        $data['admin'] = $this->db
+            ->select("*, PERANGKAT_DAERAH")
+            ->get_where('tbl_user', ['ID' => $admin_id])
+            ->row();
+
+        // 3. Ambil data OPD untuk isi dropdown
         $data['opd'] = $this->M_admin->get_opd();
 
         $this->load->view('admin/header');
         $this->load->view('admin/sidebar');
-        $this->load->view('admin/tambah_kegiatan', $data);
+        // Pastikan $data dikirim ke view tambah_kegiatan
+        $this->load->view('admin/tambah_kegiatan', $data); 
         $this->load->view('admin/footer');
     }
 

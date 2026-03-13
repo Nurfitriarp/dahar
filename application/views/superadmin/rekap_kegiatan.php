@@ -87,10 +87,11 @@
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             
                             <h6 class="m-0 font-weight-bold text-primary">REKAP KEGIATAN</h6>              
-                            <form class="form-inline navbar-search" method="POST" action="<?= base_url('superadmin/search'); ?>">
+                            <form class="form-inline navbar-search" method="POST" action="<?= base_url('superadmin/rekap_search'); ?>">
+                                <?= form_hidden($this->security->get_csrf_token_name(), $this->security->get_csrf_hash()); ?>
                                 <div class="input-group">
                                     <input type="text" name="keyword" class="form-control bg-light border-5 small" placeholder="Cari Kegiatan..."
-                                        aria-label="Search" aria-describedby="basic-addon2" value="<?= isset($keyword) ? $keyword : ''; ?>">
+                                        value="<?= isset($keyword) ? $keyword : ''; ?>">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="submit">
                                             <i class="fas fa-search fa-sm"></i>
@@ -105,7 +106,9 @@
                             <?php if(isset($keyword) && !empty($keyword)): ?>
                                 <div class="alert alert-info">
                                     Hasil pencarian untuk: <strong><?= htmlspecialchars($keyword); ?></strong>
-                                    <a href="<?= base_url('admin/rekap'); ?>" class="float-right">Bersihkan pencarian</a>
+                                    <a href="<?= base_url('superadmin/rekap'); ?>" class="float-right text-danger">
+                                        <i class="fas fa-sync"></i> Bersihkan pencarian
+                                    </a>
                                 </div>
                             <?php endif; ?>
                             <?php if(!empty($kegiatan)): ?>
@@ -146,7 +149,11 @@
 <script>
     // Auto dismiss alert setelah 3 detik
     document.addEventListener('DOMContentLoaded', function() {
-        const alerts = document.querySelectorAll('.alert:not(.alert-warning)');
+        // PERBAIKAN: Gunakan selector yang lebih spesifik.
+        // Kita hanya mengambil alert-success (hijau) dan alert-danger (merah).
+        // alert-info (pencarian) tidak akan masuk dalam list ini.
+        const alerts = document.querySelectorAll('.alert-success, .alert-danger');
+        
         alerts.forEach(function(alert) {
             setTimeout(function() {
                 alert.style.transition = 'opacity 0.5s ease-out';

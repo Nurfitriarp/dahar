@@ -121,7 +121,7 @@
                         <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>No</th>
+                                <th class="text-center" width="70">No</th>
                                 <th>Nama Jenis Perangkat Daerah</th>
                                 <th class="text-center" width="auto">Aksi</th>
                             </tr>
@@ -129,7 +129,7 @@
                             <tbody>
                                 <?php $no = 1; foreach($master as $row): ?>
                                 <tr>    
-                                    <td><?= $row->{'ID_J-OPD'}; ?></td> 
+                                    <td class="text-center"><?= $no++; ?></td>
                                     <td><?= $row->NAMA_OPD; ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('superadmin/editpd/'. $row->{'ID_J-OPD'}); ?>" class="btn btn-sm btn-warning shadow-sm" title="Edit">

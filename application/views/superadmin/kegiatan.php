@@ -209,9 +209,11 @@
         <!-- End of Main Content -->
 
         <script>
-            // Auto dismiss alert setelah 3 detik
+            // Auto dismiss alert kecuali untuk informasi pencarian
             document.addEventListener('DOMContentLoaded', function() {
-                const alerts = document.querySelectorAll('.alert:not(.alert-warning)');
+                // Hanya pilih alert success dan alert error untuk dihapus otomatis
+                const alerts = document.querySelectorAll('.alert-success, .alert-danger');
+                
                 alerts.forEach(function(alert) {
                     setTimeout(function() {
                         alert.style.transition = 'opacity 0.5s ease-out';
@@ -219,7 +221,7 @@
                         setTimeout(function() {
                             alert.remove();
                         }, 500);
-                    }, 3000);
+                    }, 3000); // 3 detik
                 });
             });
         </script>

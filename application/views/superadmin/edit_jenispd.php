@@ -17,8 +17,8 @@
                         <input type="text" name="NAMA_OPD" class="form-control" value="<?= $jenispd->{'NAMA_OPD'}; ?>"required>
                     </div>
     
-                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                 <a href="<?= base_url('superadmin/jenispd'); ?>" class="btn btn-secondary">Batal</a>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             </form>
         </div>
     </div>

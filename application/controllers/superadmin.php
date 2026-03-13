@@ -565,29 +565,62 @@ class Superadmin extends MY_Controller {
     }
 
     public function search()
-    {
-        $keyword = $this->input->post('keyword');
-        $admin_id = $this->session->userdata('admin_id');
-        
-        // Ambil data admin untuk sidebar/header
-        $data['superadmin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+{
+    $keyword = $this->input->post('keyword');
+    $admin_id = $this->session->userdata('admin_id');
+    
+    $data['superadmin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
 
-        if (!empty($keyword)) {
-            $this->db->like('NAMA', $keyword);
-            $this->db->or_like('TEMPAT', $keyword);
-            $data['kegiatan'] = $this->db->get('tbl_kegiatan')->result();
-        } else {
-            $data['kegiatan'] = $this->M_admin->get_data();
-        }
-
-        // Variabel kunci untuk memunculkan alert di view
-        $data['keyword'] = $keyword; 
-
-        $this->load->view('superadmin/header');
-        $this->load->view('superadmin/sidebar', $data);
-        $this->load->view('superadmin/kegiatan', $data); // Pastikan nama view sesuai
-        $this->load->view('superadmin/footer');
+    if (!empty($keyword)) {
+        $this->db->select('*');
+        $this->db->from('tbl_kegiatan');
+        $this->db->group_start();
+        $this->db->like('NAMA', $keyword);
+        $this->db->or_like('TEMPAT', $keyword);
+        $this->db->or_like('PIMPINAN_RAPAT', $keyword);
+        $this->db->group_end();
+        $data['kegiatan'] = $this->db->get()->result();
+    } else {
+        // Gunakan alias model yang benar (M_superadmin)
+        $data['kegiatan'] = $this->M_superadmin->get_data(); 
     }
+
+    $data['keyword'] = $keyword; 
+
+    $this->load->view('superadmin/header');
+    $this->load->view('superadmin/sidebar', $data);
+    $this->load->view('superadmin/kegiatan', $data); // Pastikan view-nya tetap 'kegiatan'
+    $this->load->view('superadmin/footer');
+}
+
+    public function rekap_search()
+{
+    $keyword = $this->input->post('keyword');
+    $admin_id = $this->session->userdata('admin_id');
+    
+    $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+
+    if (!empty($keyword)) {
+        $this->db->select('*');
+        $this->db->from('tbl_kegiatan');
+        $this->db->group_start();
+        $this->db->like('NAMA', $keyword);
+        $this->db->or_like('TEMPAT', $keyword);
+        $this->db->or_like('PIMPINAN_RAPAT', $keyword);
+        $this->db->group_end();
+        $data['kegiatan'] = $this->db->get()->result();
+    } else {
+        $data['kegiatan'] = $this->M_admin->get_data(); 
+    }
+
+    $data['keyword'] = $keyword; 
+
+    $this->load->view('superadmin/header');
+    $this->load->view('superadmin/sidebar', $data);
+    // PERBAIKAN: Ubah 'rekap' menjadi 'rekap_kegiatan' agar sesuai nama file aslinya
+    $this->load->view('superadmin/rekap_kegiatan', $data); 
+    $this->load->view('superadmin/footer');
+}
 
     public function hapuspd($id)
     {

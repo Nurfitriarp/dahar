@@ -55,6 +55,8 @@ $route['admin/kegiatan/search'] = 'admin/kegiatan_search';
 $route['admin/kegiatan'] = 'admin/kegiatan';
 $route['admin/rekap/search'] = 'admin/rekap_search';
 $route['admin/rekap'] = 'admin/rekap';
+$route['superadmin/kegiatan/search'] = 'superadmin/search';
+$route['superadmin/rekap/search'] = 'superadmin/search';
 
 $route['default_controller'] = 'auth';
 $route['404_override'] = '';
