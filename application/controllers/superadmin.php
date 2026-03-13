@@ -119,7 +119,6 @@ class Superadmin extends MY_Controller {
             'PIMPINAN_RAPAT' => $this->input->post('PIMPINAN_RAPAT'),
             'ID_OPD' => $this->input->post('ID_OPD'),
             'JML_PESERTA' => $this->input->post('JML_PESERTA'),
-            'JAM_PELAJARAN' => $this->input->post('JAM_PELAJARAN'),
         ];
 
         $this->db->where('ID_KEGIATAN', $id);
@@ -563,6 +562,31 @@ class Superadmin extends MY_Controller {
             $this->session->set_flashdata('error', 'Gagal memperbarui data.');
         }
         redirect('superadmin/jenispd');
+    }
+
+    public function search()
+    {
+        $keyword = $this->input->post('keyword');
+        $admin_id = $this->session->userdata('admin_id');
+        
+        // Ambil data admin untuk sidebar/header
+        $data['superadmin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
+
+        if (!empty($keyword)) {
+            $this->db->like('NAMA', $keyword);
+            $this->db->or_like('TEMPAT', $keyword);
+            $data['kegiatan'] = $this->db->get('tbl_kegiatan')->result();
+        } else {
+            $data['kegiatan'] = $this->M_admin->get_data();
+        }
+
+        // Variabel kunci untuk memunculkan alert di view
+        $data['keyword'] = $keyword; 
+
+        $this->load->view('superadmin/header');
+        $this->load->view('superadmin/sidebar', $data);
+        $this->load->view('superadmin/kegiatan', $data); // Pastikan nama view sesuai
+        $this->load->view('superadmin/footer');
     }
 
     public function hapuspd($id)
