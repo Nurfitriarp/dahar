@@ -7,80 +7,76 @@ class Presensi extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     public function isi($token, $identifier = '') {
-        // 1. Cari kegiatan berdasarkan token
         $kegiatan = $this->db->get_where('tbl_kegiatan', ['qr_token' => $token])->row();
-
         if (!$kegiatan) {
-            die("Link Presensi Tidak Valid.");
+            show_error("Link Presensi Tidak Valid atau Telah Kedaluwarsa.", 404, "Akses Ditolak");
         }
-
-        // 2. Cari data peserta terakhir jika ada identifier
-        $peserta_lama = null;
-        if (!empty($identifier)) {
-            $peserta_lama = $this->db->order_by('ID_LOGIN', 'DESC')
-                                    ->get_where('tbl_presensi', ['NAMA' => $identifier])
-                                    ->row();
-        }
-
-        $data['kegiatan'] = $kegiatan;
-        $data['opd'] = $this->db->get('tbl_opd')->result();
-        // --- AMBIL DATA KATEGORI UNTUK DROPDOWN ---
+        $data['kegiatan']  = $kegiatan;
+        $data['opd']       = $this->db->get('tbl_opd')->result();
         $data['jenis_opd'] = $this->db->get('tbl_jenis_opd')->result(); 
-        // ------------------------------------------
-        $data['lama'] = $peserta_lama;
-
         $this->load->view('publik/form_presensi', $data);
     }
 
     public function kirim() {
-    $input = $this->input->post();
-    
-    $data_hadir = [
-        'ID_KEGIATAN' => $input['ID_KEGIATAN'],
-        'NAMA'        => $input['NAMA'],
-        'JEN_KEL'     => $input['JEN_KEL'],
-        'NO_HP'       => $input['NO_HP'],
-        'EMAIL'       => $input['EMAIL'],
-        'ID_OPD'      => $input['ID_OPD'], // Langsung ambil nilainya
-        'JABATAN'     => $input['JABATAN'],
-        'TTD'         => $input['TTD']
-    ];
+        $input = $this->input->post();
+        $opd = $this->db->get_where('tbl_opd', ['ID_OPD' => $input['ID_OPD']])->row();
+        $nama_skpd = ($opd) ? $opd->NAMA_OPD : '-';
 
-    if($this->db->insert('tbl_presensi', $data_hadir)) {
-        $this->session->set_flashdata('sukses_presensi', 'Terima kasih, data kehadiran Anda telah kami simpan.');
-        redirect('presensi/sukses');
+        $data_simpan = [
+            'ID_KEGIATAN' => $input['ID_KEGIATAN'],
+            'NAMA'        => strtoupper($input['NAMA']),
+            'JEN_KEL'     => $input['JEN_KEL'],
+            'SKPD'        => $nama_skpd,
+            'JABATAN'     => $input['JABATAN'],
+            'NO_HP'       => $input['NO_HP'],
+            'EMAIL'       => $input['EMAIL'],
+            'TTD'         => $input['TTD'],
+            'DATE_TIME'   => date('Y-m-d H:i:s'),
+            'STS'         => 1,
+            'URUT_CETAK'  => 0
+        ];
+
+        $this->db->insert('tbl_presensi', $data_simpan);
+        $simpan_kedua = $this->db->insert('tbl_tanda_tangan', $data_simpan);
+
+        if($simpan_kedua) {
+            $this->session->set_flashdata('sukses_presensi', 'Data Anda telah berhasil tersimpan.');
+            redirect('presensi/sukses');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal menyimpan data.');
+            redirect($_SERVER['HTTP_REFERER']);
+        }
     }
-}
 
-    public function get_peserta_by_nama() {
-    // 1. Ambil input term
+    // NAMA FUNGSI DISESUAIKAN UNTUK AJAX
+    public function get_saran_nama() {
     $term = $this->input->get('term', TRUE);
-    
     if (empty($term)) {
         echo json_encode([]);
         return;
     }
 
-    // 2. Kueri manual untuk memastikan kolom KAPITAL terbaca
-    $sql = "SELECT NAMA, JEN_KEL, NO_HP, EMAIL, JABATAN 
-            FROM tbl_presensi 
-            WHERE NAMA LIKE ? 
-            GROUP BY NAMA 
-            LIMIT 10";
-    
-    $query = $this->db->query($sql, array('%' . $term . '%'));
+    $this->db->select('NAMA, JEN_KEL, SKPD, JABATAN, NO_HP, EMAIL');
+    $this->db->from('tbl_tanda_tangan');
+    // Gunakan group_start untuk pencarian yang lebih fleksibel
+    $this->db->group_start();
+        $this->db->like('LOWER(NAMA)', strtolower($term));
+    $this->db->group_end();
+    $this->db->group_by('NAMA'); 
+    $this->db->order_by('DATE_TIME', 'DESC');
+    $this->db->limit(5);
+    $query = $this->db->get()->result();
 
-    // 3. Kirim hasil sebagai JSON murni
     $this->output
          ->set_content_type('application/json')
-         ->set_output(json_encode($query->result_array()));
+         ->set_output(json_encode($query));
 }
 
     public function sukses() {
         $this->load->view('publik/sukses_presensi');
     }
-
 }

@@ -90,7 +90,7 @@ class Superadmin extends MY_Controller {
     }
 
         // Contoh logika di Controller
-        public function simpan() {
+    public function simpan() {
     // 1. Ambil input
     $nama_kegiatan = $this->input->post('NAMA');
     $pilihan_opd   = $this->input->post('ID_OPD'); // Ini array dari Select2
@@ -124,7 +124,7 @@ class Superadmin extends MY_Controller {
         'TANGGAL'            => $this->input->post('TANGGAL'),
         'SKPD_PENYELENGGARA' => $this->input->post('SKPD_PENYELENGGARA'),
         'PIMPINAN_RAPAT'     => $this->input->post('PIMPINAN_RAPAT'),
-        'ID_OPD'             => implode(',', $final_ids), // Simpan sebagai "1,2,3"
+        'ID_OPD'             => implode(',', $final_ids), 
         'JML_PESERTA'        => $this->input->post('JML_PESERTA'),
     ];
 

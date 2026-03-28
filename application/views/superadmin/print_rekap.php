@@ -271,25 +271,39 @@
             </tr>
         </thead>
         <tbody>
-            <?php if(isset($peserta) && count($peserta) > 0): ?>
-                <?php foreach($peserta as $key => $p): ?>
-                <tr>
-                    <td><?= $key + 1 ?></td>
-                    <td><?= $p->NAMA ?? '-' ?></td>
-                    <td style="text-align: center;"><?= $p->JEN_KEL == 1 ? 'L' : 'P' ?></td>
-                    <td><?= $p->NAMA_OPD ?? '-' ?></td>
-                    <td><?= $p->JABATAN ?? '-' ?></td>
-                    <td><?= $p->NO_HP ?? '-' ?></td>
-                    <td>&nbsp;</td>
-                </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 20px;">
-                        <em>Belum ada peserta yang login</em>
-                    </td>
-                </tr>
-            <?php endif; ?>
+<tbody>
+        <?php if(isset($peserta) && count($peserta) > 0): ?>
+            <?php foreach($peserta as $key => $p): ?>
+            <tr>
+                <td style="text-align: center;"><?= $key + 1 ?></td>
+                <td style="text-transform: uppercase;"><?= $p->NAMA ?? '-' ?></td>
+                <td style="text-align: center;">
+                    <?php 
+                        if ($p->JEN_KEL == 'L' || $p->JEN_KEL == 1) echo 'L';
+                        elseif ($p->JEN_KEL == 'P' || $p->JEN_KEL == 2) echo 'P';
+                        else echo '-';
+                    ?>
+                </td>
+                <td><?= $p->SKPD ?? '-' ?></td>
+                <td><?= $p->JABATAN ?? '-' ?></td>
+                <td><?= $p->NO_HP ?? '-' ?></td>
+                <td style="text-align: center; padding: 0;">
+                    <?php if(!empty($p->TTD)): ?>
+                        <img src="<?= $p->TTD ?>" style="max-width: 80px; max-height: 40px;">
+                    <?php else: ?>
+                        &nbsp;
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="7" style="text-align: center; padding: 20px;">
+                    <em>Belum ada peserta yang melakukan presensi</em>
+                </td>
+            </tr>
+        <?php endif; ?>
+</tbody>
         </tbody>
     </table>
 
