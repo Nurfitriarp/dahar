@@ -103,7 +103,7 @@
                                             <th scope="col">Jenis Kelamin</th>
                                             <th scope="col">No. HP</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">OPD</th>
+                                            <th scope="col">Perangkat Daerah</th>
                                             <th scope="col">Jabatan</th>
                                         </tr>
                                     </thead>
@@ -116,7 +116,12 @@
                                                 <td><?= $p->JEN_KEL == 1 ? 'Laki-laki' : 'Perempuan' ?></td>
                                                 <td><?= $p->NO_HP ?? 'N/A' ?></td>
                                                 <td><?= $p->EMAIL ?? 'N/A' ?></td>
-                                                <td><?= $p->NAMA_OPD ?? 'N/A' ?></td>
+                                                <td>
+                                                    <?php 
+                                                        // Gunakan kolom SKPD karena data teks instansi tersimpan di situ
+                                                        echo !empty($p->SKPD) ? $p->SKPD : 'N/A'; 
+                                                    ?>
+                                                </td>
                                                 <td><?= $p->JABATAN ?? 'N/A' ?></td>
                                             </tr>
                                             <?php endforeach; ?>

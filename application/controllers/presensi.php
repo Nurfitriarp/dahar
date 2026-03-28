@@ -60,16 +60,20 @@ class Presensi extends CI_Controller {
         return;
     }
 
+    // Menggunakan query builder yang lebih kompatibel dengan sql_mode
     $this->db->select('NAMA, JEN_KEL, SKPD, JABATAN, NO_HP, EMAIL');
     $this->db->from('tbl_tanda_tangan');
-    // Gunakan group_start untuk pencarian yang lebih fleksibel
-    $this->db->group_start();
-        $this->db->like('LOWER(NAMA)', strtolower($term));
-    $this->db->group_end();
-    $this->db->group_by('NAMA'); 
-    $this->db->order_by('DATE_TIME', 'DESC');
-    $this->db->limit(5);
+    $this->db->like('NAMA', $term);
+    
+    // Trik: Jangan gunakan GROUP BY jika sql_mode ketat. 
+    // Gunakan ORDER BY DESC agar data yang paling baru yang muncul pertama.
+    $this->db->order_by('ID', 'DESC'); 
+    $this->db->limit(10); // Ambil 10 data terakhir yang mirip
+    
     $query = $this->db->get()->result();
+
+    // Opsional: Buat data unik di sisi PHP jika ada nama duplikat
+    // Namun biasanya data terakhir sudah cukup mewakili.
 
     $this->output
          ->set_content_type('application/json')

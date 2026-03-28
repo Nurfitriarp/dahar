@@ -234,10 +234,13 @@
     $('#formUtama').on('submit', function(e) {
         if (signaturePad.isEmpty()) {
             alert("Silakan bubuhkan tanda tangan terlebih dahulu.");
-            return false;
+            return false; 
         } else {
-            $('#ttd_image').val(signaturePad.toDataURL());
-            return true;
+            // PROSES KRUSIAL: Ambil gambar dari canvas
+            var dataURL = signaturePad.toDataURL('image/png');
+            // Masukkan ke input hidden
+            $('#ttd_image').val(dataURL); 
+            return true; 
         }
     });
 
