@@ -388,15 +388,13 @@ class Superadmin extends MY_Controller {
 
     public function tambah_user() {
         $admin_id = $this->session->userdata('admin_id');
-        // Ambil data profil untuk ditampilkan di header/sidebar
-        $data['admin'] = $this->db
-            ->select("*, PERANGKAT_DAERAH")
-            ->get_where('tbl_user', ['ID' => $admin_id])
-            ->row();
+        $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
 
-        // Pastikan urutan pemanggilan view seperti ini:
+        // Ambil data OPD untuk dropdown
+        $data['list_opd'] = $this->db->get('tbl_opd')->result(); 
+
         $this->load->view('superadmin/header');
-        $this->load->view('superadmin/sidebar', $data); // Kirim data profil ke sidebar
+        $this->load->view('superadmin/sidebar', $data);
         $this->load->view('superadmin/tambah_user', $data); 
         $this->load->view('superadmin/footer');
     }
