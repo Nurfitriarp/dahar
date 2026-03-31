@@ -83,9 +83,9 @@
                                         <?php endforeach; endif; ?>
                                     </optgroup>
                                 </select>
-                                <div id="urutan-helper" class="mt-2 small text-muted">
-                                    Urutan Input: <span id="list-urutan" class="font-weight-bold text-dark"></span>
-                                </div>
+                                <!-- <div id="urutan-helper" class="mt-2 small text-muted">  -->
+                                    <!-- Urutan Input: <span id="list-urutan" class="font-weight-bold text-dark"></span> -->
+                                <!-- </div> -->
                             </div>
 
                             <div class="form-group col-md-4">
