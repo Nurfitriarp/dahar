@@ -157,7 +157,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form method="post" action="<?= base_url('superadmin/update_foto'); ?>" enctype="multipart/form-data">
+                                    <form method="post" action="<?= base_url('admin/update_foto'); ?>" enctype="multipart/form-data">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <label>Pilih File Foto</label>
