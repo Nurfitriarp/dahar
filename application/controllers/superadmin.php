@@ -91,83 +91,107 @@ class Superadmin extends MY_Controller {
 
         // Contoh logika di Controller
     public function simpan() {
-    $pilihan_opd = $this->input->post('ID_OPD'); // Tangkap array dari Select2
-    $jml_input   = $this->input->post('JML_PESERTA'); // Tangkap string "12,14,18"
+        $pilihan_input = $this->input->post('ID_OPD'); // Isinya array: ["JENIS_1", "24", "25"]
+        $jml_input     = $this->input->post('JML_PESERTA'); // Isinya string: "10,5,5"
 
-    if (empty($pilihan_opd)) {
-        $this->session->set_flashdata('error', 'Pilih minimal satu instansi.');
-        redirect('superadmin/tambah');
-        return;
-    }
-
-    // 1. Bersihkan ID dari kategori kolektif [SEMUA]
-    $final_ids = [];
-    foreach ($pilihan_opd as $id) {
-        if (strpos($id, 'JENIS_') === false) {
-            $final_ids[] = $id;
+        if (empty($pilihan_input)) {
+            $this->session->set_flashdata('error', 'Silakan pilih minimal satu instansi.');
+            redirect('superadmin/tambah');
+            return;
         }
-    }
-    $final_ids = array_unique($final_ids);
 
-    // 2. Pecah input jumlah peserta
-    $jml_array = explode(',', $jml_input);
-    $jml_array = array_map('trim', $jml_array); 
+        // Pecah string jumlah peserta berdasarkan koma
+        $jml_array = explode(',', $jml_input);
+        $jml_array = array_map('trim', $jml_array); 
 
-    // 3. JODOHKAN ID dengan JUMLAHNYA
-    $data_gabungan = [];
-    $total_peserta = 0;
-    
-    foreach ($final_ids as $index => $id) {
-        // Ambil angka sesuai urutan, jika tidak ada set 0
-        $jml_orang = isset($jml_array[$index]) && is_numeric($jml_array[$index]) ? (int)$jml_array[$index] : 0;
+        $data_gabungan = [];
+        $total_peserta = 0;
         
-        // Format: "ID:JUMLAH"
-        $data_gabungan[] = $id . ':' . $jml_orang;
-        $total_peserta += $jml_orang;
-    }
+        foreach ($pilihan_input as $index => $val) {
+            // Ambil angka sesuai urutan, jika tidak ada atau bukan angka set 0
+            $jml_orang = (isset($jml_array[$index]) && is_numeric($jml_array[$index])) ? (int)$jml_array[$index] : 0;
+            
+            // Simpan format "IDENTITAS:JUMLAH" (Contoh: JENIS_1:10 atau 24:5)
+            $data_gabungan[] = $val . ':' . $jml_orang;
+            $total_peserta += $jml_orang;
+        }
 
-    // 4. Masukkan ke Array Data
-    $data = [
-        'NAMA'               => $this->input->post('NAMA'),
-        'TEMPAT'             => $this->input->post('TEMPAT'),
-        'JAM'                => $this->input->post('JAM'),
-        'TANGGAL'            => $this->input->post('TANGGAL'),
-        'SKPD_PENYELENGGARA' => $this->input->post('SKPD_PENYELENGGARA'),
-        'PIMPINAN_RAPAT'     => $this->input->post('PIMPINAN_RAPAT'),
-        // INI BAGIAN TERPENTING: Simpan sebagai string dipisah koma
-        'ID_OPD'             => implode(',', $data_gabungan), 
-        'JML_PESERTA'        => $total_peserta,
-        'qr_token'           => md5(uniqid(rand(), true))
-    ];
-
-    $this->db->insert('tbl_kegiatan', $data);
-    redirect('superadmin/kegiatan');
-}
-    public function update()
-    {
-        $id = $this->input->post('ID_KEGIATAN');
-        $nama_kegiatan = $this->input->post('NAMA');
         $data = [
-            'NAMA' => $nama_kegiatan,
-            'TEMPAT' => $this->input->post('TEMPAT'),
-            'JAM' => $this->input->post('JAM'),
-            'TANGGAL' => $this->input->post('TANGGAL'),
+            'NAMA'               => $this->input->post('NAMA'),
+            'TEMPAT'             => $this->input->post('TEMPAT'),
+            'JAM'                => $this->input->post('JAM'),
+            'TANGGAL'            => $this->input->post('TANGGAL'),
             'SKPD_PENYELENGGARA' => $this->input->post('SKPD_PENYELENGGARA'),
-            'PIMPINAN_RAPAT' => $this->input->post('PIMPINAN_RAPAT'),
-            'ID_OPD' => $this->input->post('ID_OPD'),
-            'JML_PESERTA' => $this->input->post('JML_PESERTA'),
+            'PIMPINAN_RAPAT'     => $this->input->post('PIMPINAN_RAPAT'),
+            'ID_OPD'             => implode(',', $data_gabungan), // Hasil: JENIS_1:10,24:5,25:5
+            'JML_PESERTA'        => $total_peserta, // Total otomatis: 20
+            'qr_token'           => md5(uniqid(rand(), true))
         ];
 
-        $this->db->where('ID_KEGIATAN', $id);
-        if ($this->db->update('tbl_kegiatan', $data)) {
-            // CATAT LOG
-            log_activity('EDIT', 'Memperbarui data kegiatan: ' . $nama_kegiatan);
-            $this->session->set_flashdata('success', 'Kegiatan berhasil diperbarui.');
+        if ($this->db->insert('tbl_kegiatan', $data)) {
+            log_activity('ADD', 'Menambahkan kegiatan: ' . $data['NAMA']);
+            $this->session->set_flashdata('success', 'Kegiatan berhasil disimpan.');
         } else {
-            $this->session->set_flashdata('error', 'Gagal memperbarui kegiatan.');
+            $this->session->set_flashdata('error', 'Gagal menyimpan data.');
         }
+
         redirect('superadmin/kegiatan');
-}
+    }
+    public function update() {
+        $id_kegiatan = $this->input->post('ID_KEGIATAN');
+        $pilihan_opd = $this->input->post('ID_OPD'); // Ini berbentuk Array
+        $jml_input   = $this->input->post('JML_PESERTA'); // Ini berbentuk String "10,20"
+
+        if (empty($pilihan_opd)) {
+            $this->session->set_flashdata('error', 'Minimal satu instansi harus dipilih.');
+            redirect($_SERVER['HTTP_REFERER']);
+            return;
+        }
+
+        // 1. Bersihkan ID (Hapus yang kategori [SEMUA]/JENIS_)
+        $final_ids = [];
+        foreach ($pilihan_opd as $id) {
+            if (strpos($id, 'JENIS_') === false) {
+                $final_ids[] = $id;
+            }
+        }
+        $final_ids = array_unique($final_ids);
+
+        // 2. Pecah String Jumlah dari input koma
+        $jml_array = explode(',', $jml_input);
+        $jml_array = array_map('trim', $jml_array);
+
+        // 3. Gabungkan kembali menjadi format ID:JML agar bisa disimpan sebagai String
+        $data_gabungan = [];
+        $total_peserta = 0;
+        foreach ($final_ids as $index => $id) {
+            $jml_orang = isset($jml_array[$index]) && is_numeric($jml_array[$index]) ? (int)$jml_array[$index] : 0;
+            $data_gabungan[] = $id . ':' . $jml_orang;
+            $total_peserta += $jml_orang;
+        }
+
+        // 4. Siapkan data untuk Update
+        $data = [
+            'NAMA'               => $this->input->post('NAMA'),
+            'TEMPAT'             => $this->input->post('TEMPAT'),
+            'JAM'                => $this->input->post('JAM'),
+            'TANGGAL'            => $this->input->post('TANGGAL'),
+            'PIMPINAN_RAPAT'     => $this->input->post('PIMPINAN_RAPAT'),
+            // KONVERSI ARRAY KE STRING DI SINI:
+            'ID_OPD'             => implode(',', $data_gabungan), 
+            'JML_PESERTA'        => $total_peserta,
+        ];
+
+        $this->db->where('ID_KEGIATAN', $id_kegiatan);
+        if ($this->db->update('tbl_kegiatan', $data)) {
+            log_activity('EDIT', 'Memperbarui kegiatan: ' . $data['NAMA']);
+            $this->session->set_flashdata('success', 'Perubahan berhasil disimpan.');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal memperbarui data.');
+        }
+        
+        redirect('superadmin/kegiatan');
+    }
 
     public function edit($id)
 {
