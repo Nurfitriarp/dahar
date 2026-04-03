@@ -266,26 +266,46 @@ class Superadmin extends MY_Controller {
     }
 
     public function detail($id)
-    {
-        $admin_id = $this->session->userdata('admin_id');
-        $data['admin'] = $this->db
-            ->select("*, PERANGKAT_DAERAH")
-            ->get_where('tbl_user', ['ID' => $admin_id])
-            ->row();
+{
+    $admin_id = $this->session->userdata('admin_id');
+    $data['admin'] = $this->db->get_where('tbl_user', ['ID' => $admin_id])->row();
 
-        $data['detail'] = $this->M_admin->get_detail($id);
-        $data['peserta'] = $this->M_admin->get_peserta($id);
+    $data['detail'] = $this->M_admin->get_detail($id);
+    $data['peserta'] = $this->M_admin->get_peserta($id);
 
-        if (!$data['detail']) {
-            $this->session->set_flashdata('error', 'Data tidak ditemukan.');
-            redirect('superadmin/kegiatan');
-        }
-
-        $this->load->view('superadmin/header');
-        $this->load->view('superadmin/sidebar');
-        $this->load->view('superadmin/rekap_detail', $data);
-        $this->load->view('superadmin/footer');
+    if (!$data['detail']) {
+        $this->session->set_flashdata('error', 'Data tidak ditemukan.');
+        redirect('superadmin/kegiatan');
     }
+
+    // --- LOGIKA HITUNG STATISTIK ---
+    $hadir = count($data['peserta']);
+    $target = (int)$data['detail']->JML_PESERTA;
+    
+    // Hitung Persentase
+    $data['persentase'] = ($target > 0) ? round(($hadir / $target) * 100, 1) : 0;
+    
+    // Hitung Gender
+    $laki = 0;
+    $perempuan = 0;
+    foreach ($data['peserta'] as $p) {
+        if (strtoupper($p->JEN_KEL) == 'L' || $p->JEN_KEL == '1') {
+            $laki++;
+        } else {
+            $perempuan++;
+        }
+    }
+    
+    $data['count_l'] = $laki;
+    $data['count_p'] = $perempuan;
+    $data['total_hadir'] = $hadir;
+    // -------------------------------
+
+    $this->load->view('superadmin/header');
+    $this->load->view('superadmin/sidebar');
+    $this->load->view('superadmin/rekap_detail', $data);
+    $this->load->view('superadmin/footer');
+}
 
     public function rekap()
     {

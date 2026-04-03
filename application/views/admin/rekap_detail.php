@@ -90,7 +90,7 @@
                 <div class="col-xl-12 col-lg-12">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Daftar Peserta yang Login</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Daftar Kehadiran Peserta </h6>
                         </div>
 
                         <div class="card-body">
@@ -103,7 +103,7 @@
                                             <th scope="col">Jenis Kelamin</th>
                                             <th scope="col">No. HP</th>
                                             <th scope="col">Email</th>
-                                            <th scope="col">OPD</th>
+                                            <th scope="col">Perangkat Daerah</th>
                                             <th scope="col">Jabatan</th>
                                         </tr>
                                     </thead>
@@ -141,7 +141,7 @@
                                         <?php else: ?>
                                             <tr>
                                                 <td colspan="7" class="text-center">
-                                                    <em>Belum ada peserta yang login</em>
+                                                    <em>Belum ada peserta yang melakukan presensi</em>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>

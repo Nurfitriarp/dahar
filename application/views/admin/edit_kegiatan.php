@@ -54,27 +54,39 @@
                             $string_jml = implode(',', $saved_jml);
                         ?>
 
-                        <select class="form-control select2-multiple" name="ID_OPD[]" id="ID_OPD" multiple="multiple" style="width: 100%;" required>
-                            <optgroup label="PILIH BERDASARKAN JENIS (KOLEKTIF)">
-                                <?php if(!empty($jenis_opd)): foreach ($jenis_opd as $j): ?>
-                                    <option value="JENIS_<?= $j->{'ID_J-OPD'} ?>" data-type="group"
-                                        <?= in_array("JENIS_".$j->{'ID_J-OPD'}, $saved_values) ? 'selected' : '' ?>>
-                                        [SEMUA] <?= $j->NAMA_OPD ?>
-                                    </option>
-                                <?php endforeach; endif; ?>
-                            </optgroup>
-                            <optgroup label="PILIH PERANGKAT DAERAH (INDIVIDU)">
-                                <?php if(!empty($opd)): foreach ($opd as $o): ?>
-                                    <option value="<?= $o->ID_OPD ?>" data-jenis="JENIS_<?= $o->{'ID_J-OPD'} ?>" data-type="individual"
-                                        <?= in_array($o->ID_OPD, $saved_values) ? 'selected' : '' ?>>
-                                        <?= $o->NAMA_OPD ?>
-                                    </option>
-                                <?php endforeach; endif; ?>
-                            </optgroup>
-                        </select>
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label class="font-weight-bold text-primary">Perangkat Daerah / Jenis (Kolektif)</label>
+                                <select class="form-control select2-multiple" name="ID_OPD[]" id="ID_OPD" multiple="multiple" style="width: 100%;" required>
+                                    <optgroup label="PILIH BERDASARKAN JENIS (KOLEKTIF)">
+                                        <?php if(!empty($jenis_opd)): foreach ($jenis_opd as $j): ?>
+                                            <option value="JENIS_<?= $j->{'ID_J-OPD'} ?>" data-type="group"
+                                                <?= in_array("JENIS_".$j->{'ID_J-OPD'}, $saved_values) ? 'selected' : '' ?>>
+                                                [SEMUA] <?= $j->NAMA_OPD ?>
+                                            </option>
+                                        <?php endforeach; endif; ?>
+                                    </optgroup>
 
-                        <input type="text" name="JML_PESERTA" id="jml_peserta_input" class="form-control" value="<?= $string_jml ?>">
-                        
+                                    <optgroup label="PILIH PERANGKAT DAERAH (INDIVIDU)">
+                                        <?php if(!empty($opd)): foreach ($opd as $o): ?>
+                                            <option value="<?= $o->ID_OPD ?>" 
+                                                    data-jenis="JENIS_<?= $o->{'ID_OPD'} ?>" 
+                                                    data-type="individual"
+                                                    <?= in_array($o->ID_OPD, $saved_values) ? 'selected' : '' ?>>
+                                                <?= $o->NAMA_OPD ?>
+                                            </option>
+                                        <?php endforeach; endif; ?>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label class="font-weight-bold text-dark">Jumlah Peserta (Pisahkan koma)</label>
+                                <input type="text" name="JML_PESERTA" id="jml_peserta_input" class="form-control" 
+                                    value="<?= $string_jml ?>" placeholder="Contoh: 12,14,18">
+                                <small class="text-danger" id="error-koma" style="display:none;">* Jumlah angka tidak sesuai!</small>
+                            </div>
+                        </div>
 
                         <hr>
                         <a href="<?= base_url('admin/kegiatan') ?>" class="btn btn-secondary shadow-sm">Batal</a>

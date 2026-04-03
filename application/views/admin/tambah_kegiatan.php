@@ -73,7 +73,7 @@
                                 </optgroup>
                                 <optgroup label="PILIH PERANGKAT DAERAH (INDIVIDU)">
                                     <?php if(!empty($opd)): foreach ($opd as $o): ?>
-                                        <option value="<?= $o->ID_OPD ?>" data-jenis="JENIS_<?= $o->{'ID_J-OPD'} ?>" data-type="individual">
+                                        <option value="<?= $o->ID_OPD ?>" data-jenis="JENIS_<?= $o->{'ID_OPD'} ?>" data-type="individual">
                                             <?= $o->NAMA_OPD ?>
                                         </option>
                                     <?php endforeach; endif; ?>
@@ -82,7 +82,7 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label class="font-weight-bold text-dark">Jumlah Peserta (Pisahkan dengan koma)</label>
+                            <label class="font-weight-bold text-dark">Jumlah Peserta</label>
                             <input type="text" name="JML_PESERTA" id="jml_peserta_input" class="form-control" placeholder="Contoh: 10,15,5">
                             <small class="text-danger" id="error-koma" style="display:none;">* Jumlah angka harus sama dengan jumlah instansi!</small>
                         </div>

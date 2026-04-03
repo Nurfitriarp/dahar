@@ -68,7 +68,6 @@
                             <div class="form-group col-md-8">
                                 <label class="font-weight-bold text-primary">Perangkat Daerah / Jenis (Kolektif)</label>
                                 <select class="form-control select2-multiple" name="ID_OPD[]" id="ID_OPD" multiple="multiple" style="width: 100%;" required>
-                                    
                                     <optgroup label="PILIH BERDASARKAN JENIS (KOLEKTIF)">
                                         <?php if(!empty($jenis_opd)): foreach ($jenis_opd as $j): ?>
                                             <option value="JENIS_<?= $j->{'ID_J-OPD'} ?>" data-type="group"

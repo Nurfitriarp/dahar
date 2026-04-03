@@ -56,8 +56,26 @@
                                     <p><?= $detail->SKPD_PENYELENGGARA ?? 'N/A' ?></p>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="font-weight-bold">Jumlah Peserta:</label>
-                                    <p><?= $detail->JML_PESERTA ?? 'N/A' ?></p>
+                                    <label class="font-weight-bold">Statistik Kehadiran:</label>
+                                    <div class="p-3 bg-light border-left-primary rounded">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Target Peserta: <?= $detail->JML_PESERTA ?> Orang</div>
+                                                <div class="h6 mb-0 font-weight-bold text-gray-800">Telah Hadir: <?= $total_hadir ?> Orang (<?= $persentase ?>%)</div>
+                                                
+                                                <div class="progress progress-sm mr-2 mt-2">
+                                                    <div class="progress-bar bg-primary" role="progressbar" 
+                                                        style="width: <?= $persentase ?>%" aria-valuenow="<?= $persentase ?>" 
+                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+
+                                                <div class="mt-2 small">
+                                                    <span class="mr-2"><i class="fas fa-mars text-info"></i> Laki-laki: <b><?= $count_l ?></b></span>
+                                                    <span><i class="fas fa-venus text-danger"></i> Perempuan: <b><?= $count_p ?></b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
