@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Santika - Aplikasi Absensi</title>
+    <title>SITEPAT - Sistem Informasi Terpadu Presensi Aktivitas</title>
 
     <!-- Custom fonts for this template-->
     <link href="<?= base_url('assets/vendor/fontawesome-free/css/all.min.css') ?>" rel="stylesheet">

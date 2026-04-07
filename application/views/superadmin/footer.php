@@ -2,7 +2,7 @@
             <footer class="sticky-footer bg-dark">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Aplikasi Daftar Hadir - Aptika 2026</span>
+                        <span>SITEPAT - Sistem Informasi Terpadu Presensi Aktivitas</span>
                     </div>
                 </div>
             </footer>
